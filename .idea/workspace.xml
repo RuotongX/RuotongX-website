@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a6bf323f-20fe-4800-b331-0e5cda4d8067" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/Banner0.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/Banner0.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/Banner2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/Banner2.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/background1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner0.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner0.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner2.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner2.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Home/data.source.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/data.source.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Home/less/banner1.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner1.less" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +125,7 @@
       <workItem from="1641367738416" duration="395000" />
       <workItem from="1641368563488" duration="1251000" />
       <workItem from="1642573591629" duration="2442000" />
-      <workItem from="1650356926144" duration="14484000" />
+      <workItem from="1650356926144" duration="16218000" />
     </task>
     <servers />
   </component>

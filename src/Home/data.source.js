@@ -102,7 +102,7 @@ export const Banner20DataSource = {
         title: { className: 'banner2-title', children: 'Ruotong profile' },
         content: {
           className: 'banner2-content',
-          children: 'page based on React, AWS, Github Action, AntMotion, Docker',
+          children: 'This page based on React, AWS, Github Action, AntMotion, Docker, Antd lending',
         },
         button: { className: 'banner2-button', children: 'Learn More' },
       },
