@@ -45,7 +45,7 @@ class Banner extends React.PureComponent {
           {...elem}
           prefixCls={elemClassName}
         >
-          <BgElement key="bg" {...bg} id={`bg${i}`} />
+          <BgElement key="bg" {...bg} id={`bg${i}`}  />
           <div {...page}>
             <QueueAnim
               type={['bottom', 'top']}

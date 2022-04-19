@@ -5,14 +5,20 @@ import QueueAnim from 'rc-queue-anim';
 import TweenOne from 'rc-tween-one';
 import { isImg } from './utils';
 
+
+
+
 class Banner extends React.PureComponent {
   render() {
+
     const { ...currentProps } = this.props;
     const { dataSource } = currentProps;
     delete currentProps.dataSource;
     delete currentProps.isMobile;
     return (
+
       <div {...currentProps} {...dataSource.wrapper}>
+
         <QueueAnim
           key="QueueAnim"
           type={['bottom', 'top']}
