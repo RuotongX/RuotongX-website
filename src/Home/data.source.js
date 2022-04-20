@@ -14,77 +14,77 @@ export const Nav00DataSource = {
         className: 'header0-item',
         children: {
           href: '#',
-          children: [{ children: '导航一', name: 'text' }],
+          children: [{ children: 'Main Page', name: 'text' }],
         },
-        subItem: [
-          {
-            name: 'sub0',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-          {
-            name: 'sub1',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-        ],
+        // subItem: [
+        //   {
+        //     name: 'sub0',
+        //     className: 'item-sub',
+        //     children: {
+        //       className: 'item-sub-item',
+        //       children: [
+        //         {
+        //           name: 'image0',
+        //           className: 'item-image',
+        //           children:
+        //             'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
+        //         },
+        //         {
+        //           name: 'title',
+        //           className: 'item-title',
+        //           children: 'Ant Design',
+        //         },
+        //         {
+        //           name: 'content',
+        //           className: 'item-content',
+        //           children: '企业级 UI 设计体系',
+        //         },
+        //       ],
+        //     },
+        //   },
+        //   {
+        //     name: 'sub1',
+        //     className: 'item-sub',
+        //     children: {
+        //       className: 'item-sub-item',
+        //       children: [
+        //         {
+        //           name: 'image0',
+        //           className: 'item-image',
+        //           children:
+        //             'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
+        //         },
+        //         {
+        //           name: 'title',
+        //           className: 'item-title',
+        //           children: 'Ant Design',
+        //         },
+        //         {
+        //           name: 'content',
+        //           className: 'item-content',
+        //           children: '企业级 UI 设计体系',
+        //         },
+        //       ],
+        //     },
+        //   },
+        // ],
       },
-      {
-        name: 'item1',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航二', name: 'text' }],
-        },
-      },
-      {
-        name: 'item2',
-        className: 'header0-item',
-        children: {
-          href: '#',
-          children: [{ children: '导航三', name: 'text' }],
-        },
-      },
+      // {
+      //   name: 'item1',
+      //   className: 'header0-item',
+      //   children: {
+      //     href: '#',
+      //     children: [{ children: '导航二', name: 'text' }],
+      //   },
+      // },
+      // {
+      //   name: 'item2',
+      //   className: 'header0-item',
+      //   children: {
+      //     href: '#',
+      //     children: [{ children: '导航三', name: 'text' }],
+      //   },
+      // },
     ],
   },
   mobileMenu: { className: 'header0-mobile-menu' },
@@ -136,7 +136,7 @@ export const Banner10DataSource = {
             <span>
               <span>
                 <span>
-                  <p>by Swift</p>
+                  <p>A trip Plan Management Application which based on Swift 5.1</p>
                 </span>
               </span>
             </span>
@@ -154,14 +154,21 @@ export const Banner10DataSource = {
         bg: { className: 'bg bg1' },
         title: {
           className: 'banner1-title',
-          children:
-            'https://d3fd5j8wprxn3h.cloudfront.net/wp-content/uploads/2021/07/hatsune-miku-if-nendoroid-kei-hatsune-miku-chronicle-small.jpeg',
+          children: (
+              <span>
+              <p> </p>
+              <p>
+                <br />
+              </p>
+            </span>
+          ),
         },
         content: {
           className: 'banner1-content',
           children: (
             <span>
-              <p>网页</p>
+
+              <p> </p>
               <p>
                 <br />
               </p>
@@ -174,15 +181,29 @@ export const Banner10DataSource = {
         name: 'elem2',
         BannerElement: { className: 'banner-user-elem' },
         textWrapper: { className: 'banner1-text-wrapper' },
-        bg: { className: 'bg bg1' },
+        bg: { className: 'bg bg2' },
         title: {
           className: 'banner1-title',
-          children:
-            'https://zos.alipayobjects.com/rmsportal/HqnZZjBjWRbjyMr.png',
+          children: (
+              <span>
+              <p> </p>
+              <p>
+                <br />
+              </p>
+            </span>
+          ),
         },
         content: {
           className: 'banner1-content',
-          children: '一个高效的页面动画解决方案',
+          children: (
+              <span>
+              <p> </p>
+              <p>
+                <br />
+              </p>
+            </span>
+          ),
+
         },
         button: { className: 'banner1-button', children: 'Learn More' },
       },
@@ -190,15 +211,28 @@ export const Banner10DataSource = {
         name: 'elem~kyedkl1c4w',
         BannerElement: { className: 'banner-user-elem' },
         textWrapper: { className: 'banner1-text-wrapper' },
-        bg: { className: 'bg bg1' },
+        bg: { className: 'bg bg3' },
         title: {
           className: 'banner1-title',
-          children:
-            'https://zos.alipayobjects.com/rmsportal/HqnZZjBjWRbjyMr.png',
+          children: (
+              <span>
+              <p> </p>
+              <p>
+                <br />
+              </p>
+            </span>
+          ),
         },
         content: {
           className: 'banner1-content',
-          children: '一个高效的页面动画解决方案',
+          children: (
+              <span>
+              <p> </p>
+              <p>
+                <br />
+              </p>
+            </span>
+          ),
         },
         button: { className: 'banner1-button', children: 'Learn More' },
       },
@@ -220,7 +254,7 @@ export const Banner01DataSource = {
     className: 'banner0-content kyl5ein1je-editor_css',
     children: (
       <span>
-        <p>By Sketch</p>
+        <p>Sketch design preview of a mobile application with real-time camera object recognization</p>
       </span>
     ),
   },
@@ -263,7 +297,7 @@ export const Content40DataSource = {
     className: 'content4-video',
     children: {
       video: 'https://os.alipayobjects.com/rmsportal/EejaUGsyExkXyXr.mp4',
-      image: 'https://zos.alipayobjects.com/rmsportal/HZgzhugQZkqUwBVeNyfz.jpg',
+      image: "../../public/imgsource/TSF.jpg",
     },
   },
 };
@@ -311,7 +345,7 @@ export const Teams10DataSource = {
               name: 'image',
               className: 'teams1-image',
               children:
-                'https://gw.alipayobjects.com/mdn/rms_ae7ad9/afts/img/A*--rVR4hclJYAAAAAAAAAAABjARQnAQ',
+                '',
             },
             {
               name: 'title',

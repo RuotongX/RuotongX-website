@@ -30,7 +30,13 @@
     }
   }
   .bg1 {
-    background: url("https://zos.alipayobjects.com/rmsportal/xHxWkcvaIcuAdQl.jpg") center;
+    background: url(../../../public/imgsource/jp2.JPG) center;
+  }
+  .bg2{
+    background: url(../../../public/imgsource/jp3.JPG) center;
+  }
+  .bg3{
+    background: url(../../../public/imgsource/jp4.JPG) center;
   }
   .bg {
     width: 100%;
@@ -48,57 +54,51 @@
   .banner-user-elem .banner-user-text {
     top: 40%;
   }
-  & &-text-wrapper {
-    display: block;
-    position: relative;
-    top: 20%;
-    left: 0;
-    right: 0;
-    margin: auto;
+
+  &-text-wrapper {
+    display: inline-block;
     font-size: 14px;
     color: @template-text-color-light;
-    width: 1600px;
+    width: 400px;
     text-align: left;
-  }
-  & &-title {
-    width: 650px;
-    left: 30px;
-    margin: auto;
-    display: inline-block;
-    font-size: 60px;
-    position: relative;
-  }
-  & &-content {
-    margin-bottom: 500px;
-    margin-left: 300px;
-    word-wrap: break-word;
-  }
-  & &-button {
-    border: 1px solid #fff;
-    color: #fff;
-    background: transparent;
-    box-shadow: 0 0 0 transparent;
-    transition: background .45s @ease-out, box-shadow .45s @ease-out;
-    line-height: 36px;
-    font-size: 16px;
-    height: 36px;
-    & span {
-      text-shadow: 0 0 0 rgba(0, 0, 0, 0);
-      transition: text-shadow .45s @ease-out;
+    margin-left: 100px;
+    top:22%;
+    .@{banner1}-title {
+      left: 0;
+      margin: auto;
+      position: relative;
+      font-size: 56px;
     }
-    &:hover {
+    & .@{banner1}-content {
+      word-wrap: break-word;
+      margin: 50px auto 50px 10px;
+      font-weight: lighter;
+      font-size: 15px;
+    }
+    button {
+
+      border: 1px solid #fff;
       color: #fff;
-      border-color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 10px rgba(50, 250, 255, 0.75);
+      background: transparent;
+      transition: background .45s @ease-in, border .45s @ease-in;
+      line-height: 36px;
+      font-size: 16px;
+      height: 42px;
       & span {
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, .35);
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        transition: text-shadow .45s @ease-out;
+      }
+      &:hover {
+        color: #fff;
+        border-color: @primary-color;
+        background: @primary-color;
+        transition: background .45s @ease-out, border .45s @ease-out;
+        & span {
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, .35);
+        }
       }
     }
 
-    &.queue-anim-leaving {
-      width: auto;
-    }
   }
   & &-icon {
     bottom: 20px;
@@ -122,6 +122,7 @@
   .@{banner1} {
     & &-text-wrapper {
       width: 90%;
+
       .@{banner1}-title {
         width: 90%;
         left: 0;
