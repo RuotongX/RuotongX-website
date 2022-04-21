@@ -32,7 +32,6 @@ jobs:
     - run: npm install @ant-design/compatible --save
     - run: npm install babel-plugin-import --save-dev
     - run: npm install react-app-rewired customize-cra less less-loader
-    - run: npm install --save-dev postcss-loader@2.1.1
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
