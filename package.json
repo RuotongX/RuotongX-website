@@ -12,6 +12,7 @@
     "dplayer": "^1.26.0",
     "enquire-js": "^0.2.1",
     "less-loader": "^10.2.0",
+    "postcss-loader": "^6.2.1",
     "rc-banner-anim": "^2.4.5",
     "rc-queue-anim": "^2.0.0",
     "rc-scroll-anim": "^2.7.6",
@@ -49,8 +50,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^8.0.0",
-    "babel-plugin-import": "^1.13.5",
-    "postcss": "^8.4.12",
-    "postcss-loader": "^2.1.1"
+    "babel-plugin-import": "^1.13.5"
   }
 }
