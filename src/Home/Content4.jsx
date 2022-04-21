@@ -4,6 +4,8 @@ import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import VideoPlay from 'react-sublime-video';
 import { getChildrenToRender } from './utils';
 
+
+
 function Content4(props) {
   const { ...tagProps } = props;
   const { dataSource, isMobile } = tagProps;
@@ -18,6 +20,19 @@ function Content4(props) {
   const videoChildren = dataSource.video.children.video;
   const videoNameArray = videoChildren.split('.');
   const type = videoNameArray[videoNameArray.length - 1];
+
+
+  // const dp = new DPlayer({
+  //   container: document.getElementById('dplayer'),
+  //   screenshot: true,
+  //   video: {
+  //     url: '../../../public/imgsource/TSFV,mp4',
+  //     pic: '../../../public/imgsource/TSF.jpg',
+  //   },
+  // });
+  // dp.play();
+
+
   return (
     <div {...tagProps} {...dataSource.wrapper}>
       <div {...dataSource.page}>
@@ -46,7 +61,8 @@ function Content4(props) {
                 width="100%"
                 poster={dataSource.video.children.image}
               >
-                <source src={videoChildren} type={`video/${type}`} />
+                <source src={'../../public/imgsource/225.mp4'} />
+                {/*../../../public/imgsource/TSFV.mp4*/}
               </VideoPlay>
             )}
           </TweenOne>

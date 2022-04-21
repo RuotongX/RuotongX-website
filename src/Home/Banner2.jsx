@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+
 import { DownOutlined } from '@ant-design/icons';
 import QueueAnim from 'rc-queue-anim';
 import TweenOne, { TweenOneGroup } from 'rc-tween-one';
@@ -22,7 +22,7 @@ class Banner extends React.PureComponent {
       const textWrapper = item.textWrapper;
       const title = item.title;
       const content = item.content;
-      const button = item.button;
+
       const page = item.page;
       const follow = !isMobile
         ? {
@@ -65,9 +65,9 @@ class Banner extends React.PureComponent {
               <div key="content" {...content}>
                 {content.children}
               </div>
-              <Button type="ghost" key="button" {...button}>
-                {button.children}
-              </Button>
+              {/*<Button type="ghost" key="button" {...button}>*/}
+              {/*  {button.children}*/}
+              {/*</Button>*/}
             </QueueAnim>
           </div>
         </Element>
