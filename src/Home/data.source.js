@@ -296,8 +296,8 @@ export const Content40DataSource = {
   video: {
     className: 'content4-video',
     children: {
-      video: 'https://os.alipayobjects.com/rmsportal/EejaUGsyExkXyXr.mp4',
-      image: "../../public/imgsource/TSF.jpg",
+      video: 'https://github.com/RuotongX/RuotongX-website/blob/master/public/imgsource/TSFV.mp4?raw=true',
+      image: "https://raw.githubusercontent.com/RuotongX/RuotongX-website/master/public/imgsource/TSF.jpg?token=GHSAT0AAAAAABTMLDQRAP5P5SUE6VTI6S36YTCP5YQ",
     },
   },
 };
@@ -319,7 +319,7 @@ export const Teams10DataSource = {
                 <span>
                   <span>
                     <span>
-                      <p>Other Websites</p>
+                      <p>Other Website Projects</p>
                     </span>
                   </span>
                 </span>
@@ -345,23 +345,23 @@ export const Teams10DataSource = {
               name: 'image',
               className: 'teams1-image',
               children:
-                '',
+                'https://user-images.githubusercontent.com/37313808/150088614-b270eda7-8ece-409d-bf83-4744570c2003.JPG',
             },
             {
               name: 'title',
               className: 'teams1-title kyedxopnq77-editor_css',
-              children: '叶秀英',
+              children: 'Tree co',
             },
             {
               name: 'content',
               className: 'teams1-job',
-              children: '公司+职位 信息暂缺',
+              children: 'Shopping website',
             },
             {
               name: 'content1',
               className: 'teams1-content',
               children:
-                'AntV 是蚂蚁金服全新一代数据可视化解决方案，致力于提供一套简单方便、专业可靠、无限可能的数据可视化最佳实践。',
+                'This project is aim to build an cross-platform application for customers to buy tree online. Customers could select trees by recommandation. After they purchased their order, they could track their order on map.',
             },
           ],
         },
@@ -377,23 +377,23 @@ export const Teams10DataSource = {
               name: 'image',
               className: 'teams1-image',
               children:
-                'https://gw.alipayobjects.com/mdn/rms_ae7ad9/afts/img/A*njqxS5Ky7CQAAAAAAAAAAABjARQnAQ',
+                'https://user-images.githubusercontent.com/37313808/150084721-0834b690-960a-4c87-abea-a5af86c70225.JPG',
             },
             {
               name: 'title',
               className: 'teams1-title kyedxsu87t-editor_css',
-              children: '韩勇',
+              children: 'Onboarder',
             },
             {
               name: 'content',
               className: 'teams1-job',
-              children: '公司+职位 信息暂缺',
+              children: 'Schedule management website',
             },
             {
               name: 'content1',
               className: 'teams1-content',
               children:
-                '语雀是一款优雅高效的在线文档编辑与协同工具， 让每个企业轻松拥有文档中心阿里巴巴集团内部使用多年，众多中小企业首选。',
+                'This project provide an user interface for company to help onboarders have an onboarding progress.',
             },
           ],
         },
@@ -416,7 +416,7 @@ export const Content00DataSource = {
           <span>
             <span>
               <span>
-                <p>Profile Links</p>
+                <p>Links</p>
               </span>
             </span>
           </span>
@@ -435,19 +435,20 @@ export const Content00DataSource = {
         xs: 24,
         children: {
           className: 'content0-block-item',
+          url:'https://github.com/RuotongX',
           children: [
             {
               name: 'image',
               className: 'content0-block-icon',
               children:
-                'https://zos.alipayobjects.com/rmsportal/WBnVOjtIlGWbzyQivuyq.png',
+                'https://rmanzuk.mycpanel.princeton.edu/images/github_logo.png',
             },
             {
               name: 'title',
               className: 'content0-block-title kyedbzrdbch-editor_css',
-              children: '一站式业务接入',
+              children: 'Github page',
             },
-            { name: 'content', children: '支付、结算、核算接入产品效率翻四倍' },
+            { name: 'content', children: 'Projects which I have been done' },
           ],
         },
       },
@@ -458,21 +459,22 @@ export const Content00DataSource = {
         xs: 24,
         children: {
           className: 'content0-block-item',
+          url:'https://www.linkedin.com/in/ruotong-xu-3bb15117b/',
           children: [
             {
               name: 'image',
               className: 'content0-block-icon',
               children:
-                'https://zos.alipayobjects.com/rmsportal/YPMsLQuCEXtuEkmXTTdk.png',
+                'https://media-exp1.licdn.com/dms/image/C560BAQHaVYd13rRz3A/company-logo_100_100/0/1638831589865?e=2147483647&v=beta&t=fi3iyTgSAogCMgSmAy_DeyogJxzo38RVBK0mcEuSpc8',
             },
             {
               name: 'title',
               className: 'content0-block-title kyedbz5vp-editor_css',
-              children: '一站式事中风险监控',
+              children: 'Linkedin',
             },
             {
               name: 'content',
-              children: '在所有需求配置环节事前风险控制和质量控制能力',
+              children: 'Profile of previous experience and education',
             },
           ],
         },
@@ -484,21 +486,22 @@ export const Content00DataSource = {
         xs: 24,
         children: {
           className: 'content0-block-item',
+          url:'mailto: ruotong_xu@outlook.com',
           children: [
             {
               name: 'image',
               className: 'content0-block-icon',
               children:
-                'https://zos.alipayobjects.com/rmsportal/EkXWVvAaFJKCzhMmQYiX.png',
+                'https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg',
             },
             {
               name: 'title',
               className: 'content0-block-title kyecxdtqba-editor_css',
-              children: '一站式数据运营',
+              children: 'Contact Email',
             },
             {
               name: 'content',
-              children: '沉淀产品接入效率和运营小二工作效率数据',
+              children: 'ruotong_xu@outlook.com',
             },
           ],
         },
@@ -527,7 +530,7 @@ export const Content30DataSource = {
       {
         name: 'content',
         className: 'title-content',
-        children: '基于阿里云强大的基础资源',
+        children: 'Having experience or get in touch in university',
       },
     ],
   },
@@ -543,17 +546,17 @@ export const Content30DataSource = {
           icon: {
             className: 'content3-icon',
             children:
-              'https://zos.alipayobjects.com/rmsportal/ScHBSdwpTkAHZkJ.png',
+              'https://miro.medium.com/max/1400/1*-eHRhJcg-QPUws99xEDh6w.png',
           },
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedchchws7-editor_css',
-            children: '企业资源管理',
+            children: 'CICD',
           },
           content: {
             className: 'content3-content',
             children:
-              '云资源集中编排、弹性伸缩、持续发布和部署，高可用及容灾。',
+              'Continuous Integration Continuous Deployment, CI for Github action, CD for Heroku and AWS EC2',
           },
         },
       },

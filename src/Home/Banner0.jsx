@@ -39,7 +39,10 @@ class Banner extends React.PureComponent {
             {dataSource.content.children}
           </div>
             <div style={{textAlign: "center"}}>
-          <Button type="ghost" key="button" {...dataSource.button}>
+          <Button type="ghost" key="button" {...dataSource.button} onClick={(e) =>{
+              e.preventDefault();
+              window.location.href='https://github.com/RuotongX/Namer';
+          }}>
             {dataSource.button.children}
           </Button>
                 </div>

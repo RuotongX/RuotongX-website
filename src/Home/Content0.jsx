@@ -32,9 +32,16 @@ class Content extends React.PureComponent {
                 const { children: item, ...blockProps } = block;
                 return (
                   <Col key={i.toString()} {...blockProps}>
-                    <div {...item}>
+
+                    <div {...item} onClick={(e) =>{
+                      e.preventDefault();
+                      window.location.href=item.url;
+                    }}>
+
                       {item.children.map(getChildrenToRender)}
+
                     </div>
+
                   </Col>
                 );
               })}

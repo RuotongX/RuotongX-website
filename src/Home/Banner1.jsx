@@ -9,6 +9,7 @@ import 'rc-banner-anim/assets/index.css';
 
 const { BgElement } = Element;
 class Banner extends React.PureComponent {
+
   render() {
     const { ...props } = this.props;
     const { dataSource } = props;
@@ -39,11 +40,12 @@ class Banner extends React.PureComponent {
             <div key="content" {...content}>
               {content.children}
             </div>
-              <div style={{textAlign: "center"}}>
-                  <Button type="ghost" key="button" {...button} >
+                  <Button type="ghost" key="button" {...button}   onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href='https://github.com/RuotongX/JourneyPlanner';
+                  }}>
                       {button.children}
                   </Button>
-              </div>
           </QueueAnim>
         </Element>
       );
