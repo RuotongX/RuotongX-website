@@ -99,7 +99,7 @@ export const Banner20DataSource = {
         page: { className: 'home-page banner2-page' },
         textWrapper: { className: 'banner2-text-wrapper' },
         bg: { className: 'bg bg0' },
-        title: { className: 'banner2-title', children: 'Ruotong profile' },
+        title: { className: 'banner2-title', children: 'Ruotong Xu profile' },
         content: {
           className: 'banner2-content',
           children: 'This page based on React, AWS, Github Action, AntMotion, Docker, Antd lending',
@@ -345,7 +345,7 @@ export const Teams10DataSource = {
               name: 'image',
               className: 'teams1-image',
               children:
-                'https://user-images.githubusercontent.com/37313808/150088614-b270eda7-8ece-409d-bf83-4744570c2003.JPG',
+                'https://raw.githubusercontent.com/RuotongX/RuotongX-website/master/public/imgsource/treeco.jpg?token=GHSAT0AAAAAABTMLDQRTCIP7JH3I5VP6Q2GYTCQFEQ',
             },
             {
               name: 'title',
@@ -556,7 +556,7 @@ export const Content30DataSource = {
           content: {
             className: 'content3-content',
             children:
-              'Continuous Integration Continuous Deployment, CI for Github action, CD for Heroku and AWS EC2',
+              'Continuous Integration Continuous Deployment. Having experience CI for Github action, CD for Heroku and AWS EC2',
           },
         },
       },
@@ -569,17 +569,17 @@ export const Content30DataSource = {
           icon: {
             className: 'content3-icon',
             children:
-              'https://zos.alipayobjects.com/rmsportal/NKBELAOuuKbofDD.png',
+              'https://cdn-icons-png.flaticon.com/512/2784/2784065.png',
           },
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedcnvl9wa-editor_css',
-            children: '云安全',
+            children: 'Agile',
           },
           content: {
             className: 'content3-content',
             children:
-              '按金融企业安全要求打造的完整云上安全体系，全方位保障金融应用及数据安全。',
+              'Adaptive planning, evolutionary development, early delivery. Usually come with Kanban and SCRUM pattern. Having experience with Trello.',
           },
         },
       },
@@ -592,17 +592,17 @@ export const Content30DataSource = {
           icon: {
             className: 'content3-icon',
             children:
-              'https://zos.alipayobjects.com/rmsportal/xMSBjgxBhKfyMWX.png',
+              'https://qph.fs.quoracdn.net/main-qimg-5fe8c013edf4456a85967713963ac590',
           },
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedcq75nzh-editor_css',
-            children: '云监控',
+            children: 'MVC',
           },
           content: {
             className: 'content3-content',
             children:
-              '分布式云环境集中监控，统一资源及应用状态视图，智能分析及故障定位。',
+              'Model View Control. Having experience for design multiple projects architectures.',
           },
         },
       },
@@ -615,17 +615,17 @@ export const Content30DataSource = {
           icon: {
             className: 'content3-icon',
             children:
-              'https://zos.alipayobjects.com/rmsportal/MNdlBNhmDBLuzqp.png',
+              '',
           },
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedcyneo3l-editor_css',
-            children: '移动',
+            children: 'OOP',
           },
           content: {
             className: 'content3-content',
             children:
-              '一站式移动金融APP开发及全面监控；丰富可用组件，动态发布和故障热修复。',
+              'Object-Oriented Programming. Having experience for design multiple projects architectures.',
           },
         },
       },
@@ -643,12 +643,12 @@ export const Content30DataSource = {
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedcw4hvy-editor_css',
-            children: '分布式中间件',
+            children: 'TDD',
           },
           content: {
             className: 'content3-content',
             children:
-              '金融级联机交易处理中间件，大规模分布式计算机，数万笔/秒级并发能力，严格保证交易数据统一性。',
+              'Test-Drive development. Getting in touch with this pattern in university',
           },
         },
       },
@@ -666,12 +666,12 @@ export const Content30DataSource = {
           textWrapper: { className: 'content3-text' },
           title: {
             className: 'content3-title kyedct4kdw-editor_css',
-            children: '大数据',
+            children: 'Version Control',
           },
           content: {
             className: 'content3-content',
             children:
-              '一站式、全周期大数据协同工作平台，PB级数据处理、毫秒级数据分析工具。',
+              'Having experience for using Github to control software developing integration.',
           },
         },
       },

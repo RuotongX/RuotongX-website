@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6bf323f-20fe-4800-b331-0e5cda4d8067" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/install_app_dependencies" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/start_server" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/Banner0.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/Banner0.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/Banner1.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/Banner1.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/Content0.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/Content0.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Home/data.source.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/data.source.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner0.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner0.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner1.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner1.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Home/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Home/less/banner2.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner2.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/content4.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/content4.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supervisord.conf" beforeDir="false" afterPath="$PROJECT_DIR$/supervisord.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +132,7 @@
       <workItem from="1650356926144" duration="16218000" />
       <workItem from="1650445370544" duration="17342000" />
       <workItem from="1650531817787" duration="3574000" />
-      <workItem from="1650595966992" duration="10168000" />
+      <workItem from="1650595966992" duration="13480000" />
     </task>
     <servers />
   </component>
