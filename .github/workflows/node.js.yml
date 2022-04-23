@@ -9,39 +9,34 @@ on:
     branches: [ master ]
 
 jobs:
-  continuous-integration:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [ 12.x, 14.x, 16.x ]
     steps:
-      # Step 1
       - uses: actions/checkout@v3
-      # Step 2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-python@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      # Step 3
         - run: npm install
         - run: npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
         - run: npm install rc-banner-anim --save
         - run: npm install @ant-design/compatible --save
         - run: npm install babel-plugin-import --save-dev
         - run: npm install react-app-rewired customize-cra less less-loader
-      # Step 4
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id:${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key:${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
-      # Step 5
-      - name: Build Application and Run unit Test
-         run: npm ci
-         - run: npm run build --if-present
-         - run: npm test
+
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
 
   continuous-deployment:
     runs-on: ubuntu-latest
