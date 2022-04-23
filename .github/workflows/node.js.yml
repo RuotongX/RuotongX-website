@@ -24,8 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       # Step 3
-      - name: Install dependencies
-        run: npm install
+        - run: npm install
         - run: npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
         - run: npm install rc-banner-anim --save
         - run: npm install @ant-design/compatible --save
