@@ -26,24 +26,25 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install
-      - run: npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
-      - run: npm install rc-banner-anim --save
-      - run: npm install @ant-design/compatible --save
-      - run: npm install babel-plugin-import --save-dev
-      - run: npm install react-app-rewired customize-cra less less-loader
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+      - run: |
+        npm install
+        npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
+        npm install rc-banner-anim --save
+        npm install @ant-design/compatible --save
+        npm install babel-plugin-import --save-dev
+        npm install react-app-rewired customize-cra less less-loader
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        with:
-          args: --acl public-read --delete
-        env:
+        with: |
           aws-access-key-id:${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key:${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
+      - name: Run Tests
+        run: |
+          npm ci
+          npm run build --if-present
+          npm test
   continuous-deployment:
     runs-on: ubuntu-latest
     needs: [continuous-integration]
@@ -52,9 +53,7 @@ jobs:
       # Step 1
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        with:
-          args: --acl public-read --delete
-        env:
+        with: |
           aws-access-key-id:${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key:${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
