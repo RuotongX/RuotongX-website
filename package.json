@@ -13,6 +13,7 @@
     "enquire-js": "^0.2.1",
     "less-loader": "^10.2.0",
     "postcss-loader": "^6.2.1",
+    "postcss-normalize": "^10.0.1",
     "rc-banner-anim": "^2.4.5",
     "rc-queue-anim": "^2.0.0",
     "rc-scroll-anim": "^2.7.6",
