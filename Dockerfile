@@ -1,6 +1,7 @@
 FROM node:alpine as builder
 WORKDIR '/app'
 COPY package.json .
+RUN npm install -g npm@8.7.0
 RUN npm i web-vitals --save-dev
 RUN npm install --save --legacy-peer-deps
 RUN npm install postcss-normalize
