@@ -7,7 +7,7 @@ RUN npm install --save --legacy-peer-deps
 #RUN npm install rc-banner-anim --save --legacy-peer-deps
 #RUN npm install @ant-design/compatible --save --legacy-peer-deps
 #RUN npm install babel-plugin-import --save-dev --legacy-peer-deps
-#RUN npm install react-app-rewired customize-cra less less-loader --legacy-peer-deps
+RUN npm install react-app-rewired customize-cra less less-loader --legacy-peer-deps
 COPY ./ ./
 RUN npm run build
 
