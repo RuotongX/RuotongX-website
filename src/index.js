@@ -1,14 +1,12 @@
 import React from 'react';
-import * as ReactDOMClient from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 import App from './Home';
 // import reportWebVitals from './reportWebVitals';
 // import * as serviceWorker from './serviceWorker';
 
-const root = ReactDOMClient.createRoot(document.getElementById('root'));
-
-root.render(
+ReactDOM.render(
     <App />,
   document.getElementById('root')
 );

@@ -28,11 +28,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm install
-#      - run: npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
-#      - run: npm install rc-banner-anim --save
-#      - run: npm install @ant-design/compatible --save
-#      - run: npm install babel-plugin-import --save-dev
-#      - run: npm install react-app-rewired customize-cra less less-loader
+      - run: npm install antd enquire-js rc-queue-anim rc-scroll-anim rc-tween-one --save
+      - run: npm install rc-banner-anim --save
+      - run: npm install @ant-design/compatible --save
+      - run: npm install babel-plugin-import --save-dev
+      - run: npm install react-app-rewired customize-cra less less-loader
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
