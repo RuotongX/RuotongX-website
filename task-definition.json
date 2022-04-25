@@ -56,7 +56,7 @@
     "EXTERNAL",
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-west-1:361662705064:task-definition/DeploymentContainer:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-west-1:361662705064:task-definition/DeploymentContainer:5",
   "family": "DeploymentContainer",
   "requiresAttributes": [
     {
@@ -73,10 +73,9 @@
   "networkMode": null,
   "runtimePlatform": null,
   "cpu": "1024",
-  "revision": 1,
-  "status": "INACTIVE",
+  "revision": 5,
+  "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
-  "volumes": [],
-  "statusString": "(INACTIVE)"
+  "volumes": []
 }
