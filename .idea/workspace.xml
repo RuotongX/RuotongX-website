@@ -6,25 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a6bf323f-20fe-4800-b331-0e5cda4d8067" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/TDD.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/TSF.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/TSFV.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/background1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/git-branch.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/jp1.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/jp2.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/jp3.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/jp4.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/ob4.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/oop.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/treeco.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/imgsource/uidesign.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Home.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Home/data.source.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/data.source.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner0.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner0.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner1.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner1.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/banner2.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/banner2.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/less/content4.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/less/content4.less" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +135,9 @@
       <workItem from="1650772123626" duration="43000" />
       <workItem from="1650772176398" duration="8397000" />
       <workItem from="1650832504301" duration="1370000" />
-      <workItem from="1650878736419" duration="3678000" />
+      <workItem from="1650878736419" duration="4317000" />
+      <workItem from="1650900924607" duration="40000" />
+      <workItem from="1651751893370" duration="151000" />
     </task>
     <servers />
   </component>

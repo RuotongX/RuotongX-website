@@ -104,7 +104,7 @@ export const Banner20DataSource = {
           className: 'banner2-content',
           children: 'This page based on React, AWS, Github Action, AntMotion, Docker, Antd lending',
         },
-        button: { className: 'banner2-button', children: 'Learn More' },
+        button: { className: 'banner2-button', children: 'More Details' },
       },
     ],
   },
@@ -144,7 +144,7 @@ export const Banner10DataSource = {
         },
         button: {
           className: 'banner1-button kyl5tkcr0n-editor_css',
-          children: 'Learn More',
+          children: 'More Details',
         },
       },
       {
@@ -175,7 +175,7 @@ export const Banner10DataSource = {
             </span>
           ),
         },
-        button: { className: 'banner1-button', children: 'Learn More' },
+        button: { className: 'banner1-button', children: 'More Details' },
       },
       {
         name: 'elem2',
@@ -205,7 +205,7 @@ export const Banner10DataSource = {
           ),
 
         },
-        button: { className: 'banner1-button', children: 'Learn More' },
+        button: { className: 'banner1-button', children: 'More Details' },
       },
       {
         name: 'elem~kyedkl1c4w',
@@ -234,7 +234,7 @@ export const Banner10DataSource = {
             </span>
           ),
         },
-        button: { className: 'banner1-button', children: 'Learn More' },
+        button: { className: 'banner1-button', children: 'More Details' },
       },
     ],
   },
@@ -258,7 +258,7 @@ export const Banner01DataSource = {
       </span>
     ),
   },
-  button: { className: 'banner0-button', children: 'Learn More' },
+  button: { className: 'banner0-button', children: 'More Details' },
 };
 export const Content40DataSource = {
   wrapper: {
