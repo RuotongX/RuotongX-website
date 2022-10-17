@@ -61,7 +61,7 @@ function Content4(props) {
                 width="100%"
                 poster={dataSource.video.children.image}
               >
-                <source src={'../../public/imgsource/225.mp4'} />
+                <source src={'https://drive.google.com/uc?export=download&id=1VTOSDWJ-5jK5bWJgghVwoigbmuEaz3bH'} />
                 {/*../../../public/imgsource/TSFV.mp4*/}
               </VideoPlay>
             )}

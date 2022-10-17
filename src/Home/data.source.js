@@ -685,7 +685,7 @@ export const Footer00DataSource = {
     className: 'copyright',
     children: (
       <span>
-        <span>©2021 Ruotong Xu Profile</span>
+        <span>©2022 Ruotong Xu Profile</span>
       </span>
     ),
   },
