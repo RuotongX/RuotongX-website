@@ -10,7 +10,12 @@ class Teams1 extends React.PureComponent {
       const { titleWrapper, ...$item } = item;
       return (
         <Col key={i.toString()} {...$item}>
+          <div {...item} onClick={(e) =>{
+                      e.preventDefault();
+                      window.location.href=item.url;
+                    }}>
           {titleWrapper.children.map(getChildrenToRender)}
+          </div>
         </Col>
       );
     });
@@ -34,8 +39,9 @@ class Teams1 extends React.PureComponent {
               leaveReverse
               {...dataSource.block}
               component={Row}
+              
             >
-              {listChildren}
+             {listChildren}
             </QueueAnim>
           </OverPack>
         </div>
