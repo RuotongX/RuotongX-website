@@ -382,23 +382,23 @@ export const Teams10DataSource = {
               name: 'image',
               className: 'teams1-image',
               children:
-                'https://github.com/RuotongX/webimg/raw/main/ob4.JPG',
+                'https://github.com/RuotongX/webimg/raw/main/bakewell.JPG',
             },
             {
               name: 'title',
               className: 'teams1-title kyedxsu87t-editor_css',
-              children: 'Onboarder',
+              children: 'Bakewell',
             },
             {
               name: 'content',
               className: 'teams1-job',
-              children: 'Schedule management website',
+              children: 'Company Homepage',
             },
             {
               name: 'content1',
               className: 'teams1-content',
               children:
-                'This project provide an user interface for company to help onboarders have an onboarding progress.',
+                'This product is based on React+React Srping+Material UI, aim to be a friendly home page to easily show products idea and information of a company.',
             },
           ],
         
