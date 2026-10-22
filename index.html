@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>🐴 Ruotong Xu — full-stack engineer in Auckland</title>
+    <meta name="description" content="Ruotong (Sam) Xu — full-stack engineer in Auckland, New Zealand. One voxel sculpture, many forms." />
+    <meta name="theme-color" content="#eeeae2" />
+    <meta property="og:title" content="Ruotong Xu — one sculpture, many forms" />
+    <meta property="og:description" content="Full-stack engineer in Auckland. Scroll and Miku changes shape." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // pick the theme before first paint: saved choice, else the OS preference
+      (() => {
+        const saved = localStorage.getItem('rx-theme');
+        const night = saved ? saved === 'night' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = night ? 'night' : 'day';
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#tools">Skip to the projects</a>
+
+    <header class="bar">
+      <a class="mark" href="#top" aria-label="Ruotong Xu, back to top">
+        <span class="mark-name">Ruotong Xu</span>
+        <span class="mark-alias">a.k.a. Sam · BakaX</span>
+      </a>
+      <div class="bar-right">
+        <p class="clock" aria-live="off"><span class="clock-city">Auckland</span> <time class="clock-time">--:--</time> <span class="clock-status"></span></p>
+        <button class="lamp" type="button" aria-pressed="false">
+          <span class="lamp-dot" aria-hidden="true"></span>
+          <span class="lamp-label">Lights off</span>
+        </button>
+      </div>
+    </header>
+
+    <canvas id="stage" aria-hidden="true"></canvas>
+    <p class="loader" aria-hidden="true"><span>Herding voxels</span><span class="loader-dots">…</span></p>
+    <p class="placard" aria-hidden="true"></p>
+    <div class="callout-layer" aria-hidden="true"><svg class="callout-lines"></svg></div>
+
+    <nav class="rail" aria-label="Chapters"><ol></ol></nav>
+
+    <main id="top">
+      <!-- 00 · hello -->
+      <section class="hero" data-form="0" data-title="Hello">
+        <p class="kicker reveal">Full-stack engineer · Auckland, New Zealand</p>
+        <h1 class="giant" aria-label="Ruotong Xu"><span class="giant-line">Ruotong</span><span class="giant-line">Xu</span></h1>
+        <div class="hero-foot">
+          <p class="lede reveal">
+            I build web apps, mobile apps and the occasional thing nobody asked for — like a Miku made of
+            <span class="lede-count">a few thousand</span> cubes on my homepage.
+          </p>
+          <p class="hint reveal"><span>Scroll</span> — she changes shape.</p>
+        </div>
+      </section>
+
+      <!-- 01 · how I build now -->
+      <section class="tools" data-form="1" data-title="How I build" id="tools">
+        <header class="statement">
+          <p class="label reveal"><span class="num">01</span> How I build now</p>
+          <h2 class="statement-text" data-scrub>I stopped typing every line. <em>I didn't stop caring about them.</em></h2>
+          <p class="statement-sub reveal">So I build the tools I wish my AI pair came with.</p>
+        </header>
+        <div class="duo">
+          <a class="shot shot-a" href="https://github.com/RuotongX/Claude-Chat-Intellij" target="_blank" rel="noopener">
+            <span class="shot-frame"><img src="/img/claude-chat.webp" width="799" height="1255" loading="lazy" alt="Claude Chat for IntelliJ: Claude asks a multiple-choice question inside the IDE's tool window" /></span>
+            <span class="shot-cap">
+              <span class="shot-name">Claude Chat for IntelliJ <span class="arrow" aria-hidden="true">↗</span></span>
+              <span class="shot-line">Claude Code, docked in the IDE. Highlight a few lines and the question stays scoped to them.</span>
+              <span class="meta">Kotlin · IntelliJ Platform · MIT</span>
+            </span>
+          </a>
+          <a class="shot shot-b" href="https://github.com/RuotongX/Hermes-Tally" target="_blank" rel="noopener">
+            <span class="shot-frame"><img src="/img/hermes-tally.webp" width="682" height="1452" loading="lazy" alt="Hermes Tally: a usage sidebar showing a 94% cache hit rate, context fill and cost per model" /></span>
+            <span class="shot-cap">
+              <span class="shot-name">Hermes Tally <span class="arrow" aria-hidden="true">↗</span></span>
+              <span class="shot-line">A usage meter that counts cache writes as misses — so 94% actually means 94%.</span>
+              <span class="meta">JavaScript · Python · MIT</span>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 02 · for a friend -->
+      <section class="guitar" data-form="2" data-title="For a friend">
+        <header class="guitar-head">
+          <p class="label reveal"><span class="num">02</span> For a friend</p>
+          <h2 class="reveal">A website for someone <em>who fixes guitars.</em></h2>
+        </header>
+        <a class="browser" href="https://theguitarsurgeon.com" target="_blank" rel="noopener" aria-label="Visit theguitarsurgeon.com">
+          <span class="browser-bar"><i></i><i></i><i></i><span class="browser-url">theguitarsurgeon.com</span></span>
+          <img src="/img/guitar-surgeon.webp" width="1600" height="1000" loading="lazy" alt="The Guitar Surgeon homepage: 'Your guitar is more than wood & wire' over a workshop video" />
+        </a>
+        <p class="guitar-foot reveal">
+          <span class="meta">Astro · Cloudflare Workers, R2 &amp; D1 · 2026</span>
+          <a class="link" href="https://theguitarsurgeon.com" target="_blank" rel="noopener">Visit the workshop <span aria-hidden="true">↗</span></a>
+        </p>
+      </section>
+
+      <!-- 03 · home lab (pinned while the rack turns) -->
+      <section class="lab" data-form="3" data-title="Home lab">
+        <div class="lab-pin">
+          <header class="lab-head">
+            <p class="label reveal"><span class="num">03</span> Home lab</p>
+            <h2 class="reveal">Thirteen servers <em>in one box.</em></h2>
+            <p class="lab-sub reveal">A Proxmox machine at home — where I learn things the hard way.</p>
+          </header>
+          <ul class="lab-list">
+            <li data-pt="0,0.72,0.37" data-side="left"><b>OpenWrt + AdGuard</b><span>The router is a VM; the ad-blocker, a container.</span></li>
+            <li data-pt="-0.28,0.37,0.37" data-side="left"><b>Immich</b><span>My photo library, off the cloud.</span></li>
+            <li data-pt="-0.17,-0.22,0.37" data-side="left"><b>TrueNAS</b><span>Where everything lands. Snapshotted daily.</span></li>
+            <li data-pt="0.28,0.17,0.37" data-side="right"><b>llama.cpp</b><span>A local LLM on an RTX&nbsp;2070.</span></li>
+            <li data-pt="0.32,-0.22,0.4" data-side="right"><b>Research agent</b><span>Writes me a stock memo every week.</span></li>
+            <li data-pt="0,-0.6,0.37" data-side="right"><b>Home Assistant</b><span>Runs the smart home.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 04 · AUT -->
+      <section class="aut" data-form="4" data-title="AUT">
+        <p class="label reveal"><span class="num">04</span> Where it started</p>
+        <h2 class="honours" aria-label="First Class Honours">
+          <span class="honours-line">First Class</span>
+          <span class="honours-line"><em>Honours.</em></span>
+        </h2>
+        <p class="aut-sub reveal">Bachelor of Engineering (Honours) in Software Engineering, Auckland University of Technology.</p>
+        <p class="aut-projects reveal">
+          <span class="meta">Uni projects I still like</span>
+          <a href="https://github.com/RuotongX/Namer" target="_blank" rel="noopener">Namer</a>
+          <a href="https://github.com/RuotongX/TreeCo" target="_blank" rel="noopener">TreeCo</a>
+          <a href="https://github.com/RuotongX/JourneyPlanner" target="_blank" rel="noopener">Journey Planner</a>
+        </p>
+      </section>
+
+      <!-- 05 · contact -->
+      <section class="contact" data-form="5" data-title="Say hi" id="contact">
+        <div class="contact-copy">
+          <p class="label reveal"><span class="num">05</span> Here</p>
+          <h2 class="reveal">Based in Auckland. <em>Say hi.</em></h2>
+          <p class="contact-sub reveal">Full-stack engineer by day — logistics software, and a surprising number of maps.</p>
+          <ul class="contact-list reveal">
+            <li><a href="mailto:ruotong_xu@outlook.com"><span>Email</span><span>ruotong_xu@outlook.com</span></a></li>
+            <li><a href="https://github.com/RuotongX" target="_blank" rel="noopener"><span>GitHub</span><span>RuotongX</span></a></li>
+            <li><a href="https://www.linkedin.com/in/ruotong-xu-3bb15117b/" target="_blank" rel="noopener"><span>LinkedIn</span><span>Ruotong Xu</span></a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>Built with three.js, <span class="voxel-count">a few thousand</span> cubes and a lot of conversations with Claude.</p>
+      <p>© <span class="year">2026</span> Ruotong Xu · Hatsune Miku © Crypton Future Media, INC. — fan art under the <a href="https://piapro.net/intl/en_for_creators.html" target="_blank" rel="noopener">PCL</a></p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

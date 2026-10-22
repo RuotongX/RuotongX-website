@@ -1,0 +1,13 @@
+# The live site (ruotongxu.dpdns.org) is served by Netlify behind Cloudflare.
+# These settings override whatever the Netlify UI still has from the old Create React App build.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

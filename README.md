@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# ruotongxu-site
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Personal site for Ruotong (Sam) Xu. It has one voxel sculpture that re-sculpts itself as you scroll. Nothing is pre-rendered: every form is defined as a signed distance field, voxelised in a Web Worker on page load, and drawn as a single instanced mesh.
 
-## Available Scripts
+```
+Miku → two chat bubbles → guitar → home-lab rack → mortarboard → New Zealand
+```
 
-In the project directory, you can run:
+This repo used to hold the 2022 React/antd profile site; that version lives in git history (last commit `d2dbbda`).
 
-### `npm start`
+## Run
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+npm run dev        # http://127.0.0.1:5320  (uses node ./node_modules/vite/bin/vite.js — `npx vite` is broken on this PC)
+npm run build      # type-check + production build into dist/
+npm run preview    # serve dist/ on :5321
+npm run probe      # voxelise every form in Node: voxel counts, timings, materials
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Deploy
 
-### `npm test`
+`dist/` is plain static files with relative paths (`base: './'`), so any static host works.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Netlify** (what serves ruotongxu.dpdns.org today): `netlify.toml` sets the build command to `npm run build`, the publish folder to `dist` and Node to 22, so a push to `master` is enough if the site is linked to this repo.
+- **Anywhere else:** upload `dist/` as-is.
 
-### `npm run build`
+## How it works
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Piece | File | Notes |
+|---|---|---|
+| SDF toolkit | `src/voxel/sdf.ts` | Primitives from Inigo Quilez, plus `Acc`, an accumulator that carries a material id. It supports union, smooth union, cut and paint. |
+| The forms | `src/voxel/shapes.ts` | One function per form. `cell` is the voxel size. The NZ map is filled from `src/data/nz.ts`, the Natural Earth coastline, with fake relief for the Alps, Ruapehu and Taranaki. |
+| Voxeliser | `src/voxel/voxelize.ts` | Samples the SDF on a grid and keeps only surface voxels. It computes 5×5×5 ambient occlusion and sorts by height then angle so that morphs stay coherent. |
+| Worker | `src/voxel/voxel.worker.ts` | All 9 forms take about 0.4 s off the main thread. Small screens and ≤4-core devices use voxels 1.28× bigger, which gives about half the count. |
+| Morph | `src/scene/sculpture.ts`, `shaders.ts` | Every instance has a `from` and a `to` position. There are up to 3× more instances than the biggest form has voxels: at rest the copies overlap; in flight each cube stretches into thin threads that ride a shared vortex (the "silk"). |
+| Choreography | `src/scene/stage.ts` | `POSES[]` sets the screen position, scale and rotation for each form. Scroll progress is damped, and on mobile the sculpture sits above the copy card. |
+| Page | `index.html`, `src/style.css`, `src/main.ts` | The copy is plain HTML. Each `data-form="n"` section maps to form n. The morph into form n plays while section n travels from 95% to 20% of the viewport. The home-lab section is pinned for 3 screens while the rack turns; its `<li data-pt="x,y,z">` items become callouts anchored to those points on the rack. |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Adding or changing a form
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Write an SDF function in `shapes.ts` and add it to `SHAPES` at the position you want.
+2. Add a matching entry to `POSES` in `stage.ts`. The two arrays must stay the same length and order.
+3. Add a section with the next `data-form` index to `index.html`, and a name to `FIG_NAMES` in `main.ts`.
+4. Run `npm run probe` to check the voxel count. Keep each form under about 15k; the largest form sets the instance count.
 
-### `npm run eject`
+### Theme
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Click the lamp button to switch themes. The choice is saved in `localStorage['rx-theme']`, and the OS preference is the default. The 3D palettes live in `src/voxel/materials.ts`. The CSS tokens are at the top of `style.css`.
