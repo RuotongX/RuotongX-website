@@ -45,6 +45,24 @@ export function taper(
   return len3(pax - bax * h, pay - bay * h, paz - baz * h) - (r1 + (r2 - r1) * h);
 }
 
+/** Cylinder with flat caps between points a and b. */
+export function cappedCylinder(
+  x: number, y: number, z: number,
+  ax: number, ay: number, az: number,
+  bx: number, by: number, bz: number,
+  r: number,
+) {
+  const bax = bx - ax, bay = by - ay, baz = bz - az;
+  const pax = x - ax, pay = y - ay, paz = z - az;
+  const baba = bax * bax + bay * bay + baz * baz;
+  const paba = pax * bax + pay * bay + paz * baz;
+  const cx = len3(pax * baba - bax * paba, pay * baba - bay * paba, paz * baba - baz * paba) - r * baba;
+  const cy = Math.abs(paba - baba * 0.5) - baba * 0.5;
+  const x2 = cx * cx, y2 = cy * cy * baba;
+  const d = Math.max(cx, cy) < 0 ? -Math.min(x2, y2) : (cx > 0 ? x2 : 0) + (cy > 0 ? y2 : 0);
+  return (Math.sign(d) * Math.sqrt(Math.abs(d))) / baba;
+}
+
 /** Vertical (y-axis) cylinder, half height h, radius r, with optional edge rounding. */
 export function cylinderY(x: number, y: number, z: number, r: number, h: number, round = 0) {
   const dx = len2(x, z) - r + round;

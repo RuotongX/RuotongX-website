@@ -1,7 +1,7 @@
 // The sculpture's forms, authored as signed distance fields (sign is what matters for voxels).
 // Coordinates: y up, +z faces the viewer, everything roughly inside [-1, 1]^3.
 import {
-  Acc, box2, capsule, circle2, clamp, cylinderY, ellipsoid, extrude, roundBox, smin, sphere, taper,
+  Acc, box2, cappedCylinder, capsule, circle2, clamp, cylinderY, ellipsoid, extrude, roundBox, smin, sphere, taper,
 } from './sdf';
 import { MAT } from './materials';
 import type { Grid, ShapeDef } from './voxelize';
@@ -9,92 +9,126 @@ import { AUCKLAND, NZ_RINGS } from '../data/nz';
 
 const {
   PLASTER, STONE, INK, ACCENT, LED, SCREEN, WOOD, SAGE, GOLD, WAVE, SPRUCE, SNOW,
-  TEAL, SKIN, PINK, SILVER, TEAL_DEEP, EYE,
+  TEAL, SKIN, PINK, SILVER, EYE, BLUSH,
 } = MAT;
 
-// ---------------------------------------------------------------- Hatsune Miku, fumo-plush proportions
-// Big squashy head, tiny sitting body, legs straight out, twin tails down to the floor.
-// twin-tail spine (x mirrored): [x, y, z, radius]
+// ---------------------------------------------------------------- Hatsune Miku as a fuwa petit ("fufu") plush
+// Proportions traced from SEGA's front photo of the L plush: 1 unit = 400 px, floor at y = -1.
+// Big mochi head, tiny sitting body, feet forward, two huge floppy twin tails.
 const TAIL: ReadonlyArray<readonly [number, number, number, number]> = [
-  [0.42, 0.3, -0.1, 0.12],
-  [0.6, 0.14, -0.15, 0.17],
-  [0.7, -0.3, -0.13, 0.175],
-  [0.68, -0.72, -0.06, 0.15],
-  [0.62, -0.9, 0.06, 0.11],
+  // x (mirrored), y, z, radius
+  [0.47, 0.46, -0.08, 0.1],
+  [0.7, 0.35, -0.1, 0.145],
+  [0.9, 0.05, -0.1, 0.195],
+  [1.03, -0.32, -0.1, 0.205],
+  [1.08, -0.62, -0.08, 0.17],
 ];
-const HEAD_Y = -0.06;
-const tri = (v: number) => Math.abs((((v % 1) + 1) % 1) - 0.5) * 2; // 0..1 zig-zag
+const TAIL_Z = 1.3; // the tails are puffier front-to-back than they look from the front
+
+/** Lower edge of the hair over the face, traced in photo pixels (x -> y). */
+function bangEdge(px: number) {
+  if (px < 125) return 150;
+  if (px < 265) return 140 + (px - 125) * 1.32; // the big swept bang, long diagonal side
+  if (px < 300) return 325 - 5 * (px - 265); //   ...and its short steep side
+  if (px < 350) return 150 + (px - 300) * 0.7;
+  return 185 + 1.875 * (px - 350); // lock covering the right edge of the face
+}
+/** True where the face shows through the hair, seen from the front. */
+function faceWindow(x: number, y: number) {
+  const px = 400 * x + 235, py = 320 - 400 * y;
+  return px > 100 && px < 410 && py > bangEdge(px);
+}
 
 function miku(x: number, y: number, z: number, a: Acc) {
   const ax = Math.abs(x);
 
-  // ---- body (sitting)
-  // legs straight out in front: boots ink, teal band at the top, teal soles
-  for (const lx of [-0.12, 0.12]) {
-    a.add(capsule(x, y, z, lx, -0.86, -0.02, lx * 1.1, -0.87, 0.36, 0.085), INK);
-    a.add(roundBox(x - lx * 1.1, y + 0.87, z - 0.44, 0.07, 0.075, 0.025, 0.02), TEAL);
+  // ---- legs straight out, round teal boots
+  for (const s of [-1, 1]) {
+    a.add(capsule(x, y, z, s * 0.25, -0.86, -0.05, s * 0.29, -0.88, 0.26, 0.1), INK);
+    a.add(ellipsoid(x - s * 0.3, y + 0.88, z - 0.35, 0.125, 0.115, 0.115), TEAL);
   }
-  if (a.d <= 0 && a.m === INK && z > 0.1 && z < 0.15) a.paint(-1, TEAL);
-  // pleated skirt with a teal hem
+  // ---- skirt: dark, flared, teal hem
+  const skirtT = clamp((-0.62 - y) / 0.26, 0, 1);
+  const skirtRz = 0.22 + 0.06 * skirtT;
   {
-    const r = 0.2 + clamp(-0.72 - y, 0, 0.16) * 0.7;
-    const pleat = 0.012 * Math.cos(Math.atan2(z, x) * 12);
-    const d = Math.max(Math.hypot(x, z) - r - pleat, Math.abs(y + 0.8) - 0.09);
+    const rx = 0.3 + 0.1 * skirtT;
+    const d = Math.max(Math.hypot(x / rx, z / skirtRz) - 1, (Math.abs(y + 0.75) - 0.13) / 0.25) * 0.25;
     a.add(d, INK);
-    if (d <= 0 && y < -0.855) a.paint(-1, TEAL);
+    if (d <= 0 && y < -0.84) a.paint(-1, TEAL);
   }
-  // torso: grey sleeveless top, teal tie and collar
-  a.add(roundBox(x, y + 0.6, z, 0.16, 0.13, 0.13, 0.1), SILVER);
-  if (a.d <= 0 && a.m === SILVER && z > 0.08) {
-    if (y < -0.52 && y > -0.7 && ax < 0.028 + (-0.52 - y) * 0.14) a.paint(-1, TEAL);
-    if (y > -0.53 && ax < 0.1) a.paint(-1, TEAL);
+  // ---- grey sleeveless shirt: teal collar edge and dashed piping
+  a.add(roundBox(x, y + 0.47, z, 0.24, 0.23, 0.17, 0.1), SILVER);
+  if (a.d <= 0 && a.m === SILVER) {
+    if (y > -0.37 && y < -0.33 && ax > 0.05 && ax < 0.2 && z > 0) a.paint(-1, TEAL);
+    if (y < -0.63 && y > -0.67 && Math.floor((x + 1) / 0.05) % 2 === 0) a.paint(-1, TEAL);
   }
-  // stubby arms resting on the skirt: black sleeves, teal cuffs, tiny hands
-  for (const sx of [-1, 1]) {
-    a.add(taper(x, y, z, sx * 0.15, -0.52, 0.0, sx * 0.25, -0.72, 0.1, 0.06, 0.075), INK);
-    a.add(sphere(x - sx * 0.27, y + 0.76, z - 0.13, 0.048), SKIN);
+  // ---- the big teal tie, lying on the shirt and then the skirt
+  {
+    const ty = -y;
+    let hw = -1;
+    if (ty >= 0.25 && ty < 0.33) hw = 0.04;
+    else if (ty >= 0.33 && ty < 0.68) hw = 0.03 + (ty - 0.33) * 0.19;
+    else if (ty >= 0.68 && ty < 0.8) hw = (0.096 * (0.8 - ty)) / 0.12;
+    if (hw > 0) {
+      const zc = Math.max(0.17, y < -0.62 ? skirtRz : 0) + 0.005;
+      a.add(Math.max(Math.abs(x - 0.02 * (ty - 0.25)) - hw, Math.abs(z - zc) - 0.03), TEAL);
+    }
   }
-  if (a.d <= 0 && a.m === INK && y > -0.76 && y < -0.67 && ax > 0.2 && z > 0.04) a.paint(-1, TEAL);
+  // ---- arms: skin shoulders, long dark sleeves with teal cuffs, tiny hands
+  for (const s of [-1, 1]) {
+    a.add(capsule(x, y, z, s * 0.22, -0.32, 0, s * 0.4, -0.47, 0.04, 0.07), SKIN);
+    const d = taper(x, y, z, s * 0.37, -0.45, 0.04, s * 0.63, -0.74, 0.12, 0.08, 0.1);
+    a.add(d, INK);
+    // teal cuff: the last stretch of the sleeve
+    const t = ((ax - 0.37) * 0.26 + (-0.45 - y) * 0.29) / (0.26 * 0.26 + 0.29 * 0.29);
+    if (d <= 0 && x * s > 0 && t > 0.8) a.paint(-1, TEAL);
+    a.add(sphere(x - s * 0.67, y + 0.81, z - 0.13, 0.06), SKIN);
+  }
+  if (a.d <= 0 && a.m === SKIN && sphere(x - 0.33, y + 0.39, z - 0.06, 0.03) < 0) a.paint(-1, ACCENT); // the "01"
 
-  // ---- head
-  const hy = y - HEAD_Y;
-  a.add(ellipsoid(x, hy, z, 0.5, 0.42, 0.43), SKIN);
-  // hair: a slightly bigger dome with a face window under zig-zag bangs
-  let hair = ellipsoid(x, hy - 0.03, z + 0.025, 0.535, 0.465, 0.465);
-  const bangs = 0.1 - 0.075 * tri(x * 6.2 + 0.5);
-  if (z > 0.06 && hy < bangs && ax < 0.39) hair = 1;
-  a.add(hair, TEAL);
-  // side locks framing the face
-  a.add(taper(ax, y, z, 0.38, HEAD_Y + 0.1, 0.24, 0.4, HEAD_Y - 0.4, 0.24, 0.075, 0.05), TEAL);
+  // ---- head: a pale face under a teal hair dome; the face shows through a window under the bangs
+  a.add(ellipsoid(x, y - 0.25, z - 0.02, 0.47, 0.49, 0.44), SKIN);
+  if (!(z > 0.08 && faceWindow(x, y))) a.add(ellipsoid(x, y - 0.28, z, 0.53, 0.52, 0.5), TEAL);
+  a.add(taper(x, y, z, -0.42, 0.35, 0.22, -0.4, -0.33, 0.18, 0.07, 0.02), TEAL); // long lock, left
+  a.add(taper(x, y, z, 0.43, 0.05, 0.22, 0.38, -0.42, 0.2, 0.035, 0.012), TEAL); // thin strand, right
 
   // face
   if (a.d <= 0 && a.m === SKIN && z > 0.2) {
-    const ex = ax - 0.17, ey = hy + 0.11;
-    if ((ex / 0.085) ** 2 + (ey / 0.11) ** 2 < 1) {
-      a.paint(-1, ey > 0.045 ? INK : EYE);
-      if (Math.hypot(ax - 0.145, ey - 0.0) < 0.03) a.paint(-1, SNOW);
+    for (const s of [-1, 1]) {
+      if (((x - s * 0.235) / 0.042) ** 2 + ((y - 0.035) / 0.068) ** 2 < 1) a.paint(-1, EYE);
+      const bx = (x - s * 0.26) / 0.045;
+      if (Math.abs(bx) < 1 && Math.abs(y - 0.3 - 0.02 * (1 - bx * bx)) < 0.014) a.paint(-1, EYE); // brows
+      if (((x - s * 0.28) / 0.06) ** 2 + ((y + 0.08) / 0.032) ** 2 < 1) a.paint(-1, BLUSH);
     }
-    if ((ax - 0.3) ** 2 / 0.06 ** 2 + (hy + 0.25) ** 2 / 0.03 ** 2 < 1) a.paint(-1, PINK);
-    if (ax < 0.035 && Math.abs(hy + 0.27) < 0.018) a.paint(-1, INK);
+    // open smile: a D shape, flat on top, brown outline
+    const mx = x / 0.095, my = (y + 0.09) / 0.1, r2 = mx * mx + my * my;
+    if (my < 0 && r2 < 1) a.paint(-1, r2 > 0.55 || my > -0.25 ? EYE : BLUSH);
   }
 
-  // headset ear pieces
-  a.add(Math.max(Math.hypot(hy + 0.06, z - 0.05) - 0.1, Math.abs(ax - 0.5) - 0.045), SILVER);
-  if (a.d <= 0 && a.m === SILVER && ax > 0.53 && Math.hypot(hy + 0.06, z - 0.05) < 0.05) a.paint(-1, TEAL);
-
-  // hair ties: dark with a pink face
-  a.add(roundBox(ax - 0.44, y - 0.3, z + 0.08, 0.06, 0.09, 0.08, 0.025), INK);
-  if (a.d <= 0 && a.m === INK && ax > 0.495 && y > 0.22) a.paint(-1, PINK);
-
-  // twin tails: thick plush tubes down to the floor, darker teal on the back
-  let best = 1e9, cz = 0;
+  // ---- hair ties: dark tubes on top of the head, tilted outward, pink band
+  for (const s of [-1, 1]) {
+    const bx = s * 0.37, by = 0.46, tx = s * 0.52, ty = 0.77;
+    const d = cappedCylinder(x, y, z, bx, by, -0.05, tx, ty, -0.05, 0.1);
+    a.add(d, INK);
+    if (d <= 0) {
+      const t = ((x - bx) * (tx - bx) + (y - by) * (ty - by)) / ((tx - bx) ** 2 + (ty - by) ** 2);
+      if (t > 0.5 && t < 0.76) a.paint(-1, PINK);
+    }
+  }
+  // ---- headphones: dark ovals on the sides, pink rim at the back
+  {
+    const e = Math.hypot((y - 0.05) / 0.19, z / 0.155);
+    const d = Math.max((e - 1) * 0.155, Math.abs(ax - 0.52) - 0.065);
+    a.add(d, INK);
+    if (d <= 0 && ax > 0.55 && e > 0.62 && z < 0.06) a.paint(-1, PINK);
+  }
+  // ---- twin tails: puffy paddles from the ties down to the floor
+  let best = 1e9;
   for (let i = 0; i < TAIL.length - 1; i++) {
     const [x0, y0, z0, r0] = TAIL[i], [x1, y1, z1, r1] = TAIL[i + 1];
-    const d = taper(ax, y, z, x0, y0, z0, x1, y1, z1, r0, r1);
-    if (d < best) { best = d; cz = z0 + (z1 - z0) * clamp((y0 - y) / (y0 - y1), 0, 1); }
+    best = Math.min(best, taper(ax, y, z / TAIL_Z, x0, y0, z0 / TAIL_Z, x1, y1, z1 / TAIL_Z, r0, r1));
   }
   a.add(best, TEAL);
-  if (best <= 0 && a.m === TEAL && z < cz - 0.06) a.paint(-1, TEAL_DEEP);
 }
 
 // ---------------------------------------------------------------- two chat bubbles (building with an AI pair)
@@ -388,7 +422,7 @@ function fillNZ(g: Grid) {
 }
 
 export const SHAPES: ShapeDef[] = [
-  { id: 'miku', cell: 0.03, bounds: [-0.92, 0.92, -1.0, 0.5, -0.45, 0.55], sdf: miku },
+  { id: 'miku', cell: 0.026, bounds: [-1.3, 1.3, -1.0, 0.9, -0.52, 0.5], sdf: miku },
   { id: 'chat', cell: 0.036, bounds: [-1.0, 0.95, -0.95, 0.75, -0.3, 0.3], sdf: chat },
   { id: 'guitar', cell: 0.028, bounds: [-0.48, 0.48, -0.95, 1.3, -0.2, 0.2], sdf: guitar },
   { id: 'rack', cell: 0.04, bounds: [-0.62, 0.8, -1.02, 1.02, -0.5, 0.5], sdf: rack },

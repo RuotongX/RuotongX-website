@@ -10,7 +10,7 @@ export interface Pose {
 }
 
 const POSES: Pose[] = [
-  { x: 0.14, y: -0.16, s: 1.3, yaw: -0.28, pitch: 0.06, roll: 0, shadow: 1 }, // miku (hero)
+  { x: 0.16, y: -0.12, s: 0.98, yaw: -0.2, pitch: 0.08, roll: 0, shadow: 1 }, // fufu miku (hero)
   { x: 0.0, y: -0.66, s: 0.6, yaw: -0.3, pitch: 0.12, roll: 0, shadow: 0.5 }, // chat bubbles, under the statement / between the screenshots
   { x: 0.64, y: -0.08, s: 0.95, yaw: 0.35, pitch: 0.05, roll: -0.3, shadow: 0.7 }, // guitar, leaning on the browser
   { x: 0.0, y: -0.36, s: 0.9, yaw: 0.0, pitch: 0.12, roll: 0, shadow: 1 }, // rack, centre stage under the title

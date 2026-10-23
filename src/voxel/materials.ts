@@ -16,11 +16,12 @@ export const MAT = {
   SKIN: 13,
   PINK: 14,
   SILVER: 15,
-  TEAL_DEEP: 16, // shading inside the twin tails
-  EYE: 17, // glowing teal eyes
+  TEAL_DEEP: 16, // spare darker teal
+  EYE: 17, // brown eyes / face lines
+  BLUSH: 18, // cheeks, inside of the smile
 } as const;
 
-export const MAT_COUNT = 18;
+export const MAT_COUNT = 19;
 
 // sRGB hex palettes. Index = material id.
 export const PALETTE_DAY = [
@@ -37,11 +38,12 @@ export const PALETTE_DAY = [
   '#ead6ad', // spruce
   '#ffffff', // snow
   '#3cc4ba', // teal (Miku #39C5BB)
-  '#fbe1cf', // skin
+  '#f8e8de', // skin
   '#e2507e', // pink
   '#c9ced4', // silver
   '#249a92', // teal deep
-  '#1f9d94', // eye
+  '#4a2a20', // eye (brown)
+  '#f3a4b2', // blush
 ];
 
 export const PALETTE_NIGHT = [
@@ -58,16 +60,18 @@ export const PALETTE_NIGHT = [
   '#a58b62', // spruce
   '#e6ebf2', // snow
   '#33b5ab', // teal
-  '#d7b7a3', // skin
+  '#cdb6a8', // skin
   '#ff5c8f', // pink
   '#8d949c', // silver
   '#1d7f78', // teal deep
-  '#5cf2e4', // eye
+  '#3a221b', // eye (brown)
+  '#e88a9c', // blush
 ];
 
 /** How much each material glows (0..1) in [day, night]. */
 export const EMISSIVE: ReadonlyArray<readonly [number, number]> = [
   [0, 0], [0, 0], [0, 0], [0.05, 0.3], [0.85, 1], [0.05, 0.45],
   [0, 0], [0, 0], [0.05, 0.2], [0.5, 1], [0, 0], [0, 0.05],
-  [0, 0.1], [0, 0], [0.1, 0.5], [0, 0], [0, 0.05], [0.2, 0.9],
+  [0, 0.1], [0, 0], [0.1, 0.5], [0, 0], [0, 0.05], [0, 0],
+  [0.05, 0.25],
 ];

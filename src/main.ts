@@ -13,7 +13,7 @@ const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const fmt = (n: number) => n.toLocaleString('en-NZ');
 
 const FIG_NAMES = [
-  'Hatsune Miku, fumo plush',
+  'Hatsune Miku, fuwa petit plush',
   'Two chat bubbles',
   'Acoustic guitar',
   'Home lab rack',
@@ -232,7 +232,7 @@ function updateNote(s: Stage) {
   const vis = introDone ? Math.max(0, 1 - s.shownForm * 3) : 0;
   note.style.setProperty('--note-vis', vis.toFixed(3));
   note.classList.toggle('is-on', vis > 0.5);
-  const pt = s.project(0, 0.36, 0.3, 0.3);
+  const pt = s.project(0, 0.6, 0.82, -0.05); // top of her right hair tie
   note.style.setProperty('--x', `${(pt.x + 18).toFixed(1)}px`);
   note.style.setProperty('--y', `${(pt.y - 6).toFixed(1)}px`);
 }

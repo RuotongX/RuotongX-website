@@ -3,7 +3,7 @@
 Personal site for Ruotong (Sam) Xu. It has one voxel sculpture that re-sculpts itself as you scroll. Nothing is pre-rendered: every form is defined as a signed distance field, voxelised in a Web Worker on page load, and drawn as a single instanced mesh.
 
 ```
-Miku (fumo) → two chat bubbles → guitar → home-lab rack → mortarboard → tower crane → rubbish truck → New Zealand
+Miku (fuwa petit plush) → two chat bubbles → guitar → home-lab rack → mortarboard → tower crane → rubbish truck → New Zealand
 ```
 
 This repo used to hold the 2022 React/antd profile site; that version lives in git history (last commit `d2dbbda`).
@@ -18,12 +18,16 @@ npm run preview    # serve dist/ on :5321
 npm run probe      # voxelise every form in Node: voxel counts, timings, materials
 ```
 
-## Deploy
+## Deploy (Cloudflare Workers, static assets)
 
-`dist/` is plain static files with relative paths (`base: './'`), so any static host works.
+```bash
+npm run deploy     # vite build + wrangler deploy (uses wrangler.jsonc)
+```
 
-- **Netlify** (what serves ruotongxu.dpdns.org today): `netlify.toml` sets the build command to `npm run build`, the publish folder to `dist` and Node to 22, so a push to `master` is enough if the site is linked to this repo.
-- **Anywhere else:** upload `dist/` as-is.
+- `wrangler.jsonc` serves `dist/` as static assets, with no Worker code. `public/_headers` gives the hashed `/assets/*` files a long cache, and `public/404.html` is the not-found page.
+- The first time on a machine, run `node ./node_modules/wrangler/bin/wrangler.js login`. It opens the browser.
+- `ruotongxu.dpdns.org` is attached to the Worker as a Custom Domain, under Workers & Pages → ruotongxu-site → Domains & Routes.
+- `npm run favicon` re-renders `public/favicon.svg` from the Miku SDF as a pixel-art front view of her head.
 
 ## How it works
 
