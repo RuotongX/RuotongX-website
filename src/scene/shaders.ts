@@ -84,14 +84,16 @@ void main() {
   float fly = sin(PI * lt);
   float e = smoother(lt);
 
-  // intro: threads stream in from a loose cloud and condense into the first form
+  // intro: the figure pops out of the floor with a springy overshoot (no threads)
+  float pop = 1.0;
   if (uIntro > 0.0) {
-    float li = clamp((1.0 - uIntro) * 1.6 - aRnd.x * 0.6, 0.0, 1.0);
-    vec3 cloud = (aRnd.yzw - 0.5) * vec3(6.5, 4.5, 4.0) + vec3(0.0, 2.2, -1.0);
-    vec3 target = p;
-    p = flowPos(li, cloud, target);
-    tan3 = flowPos(min(li + 0.012, 1.0), cloud, target) - flowPos(max(li - 0.012, 0.0), cloud, target);
-    fly = max(fly, 1.0 - smoothstep(0.55, 1.0, li));
+    float t = 1.0 - uIntro;
+    float d = (aFrom.y + 1.0) * 0.16 + length(aFrom.xz) * 0.12 + aRnd.x * 0.06;
+    float li = clamp((t - d) / 0.5, 0.0, 1.0);
+    pop = li <= 0.0 ? 0.0 : 1.0 - exp(-5.5 * li) * cos(11.0 * li);
+    vec3 base = vec3(0.0, -1.0, 0.0);
+    p = base + (p - base) * pop;
+    tan3 = vec3(0.0, 1.0, 0.0);
   }
 
   // pointer: voxels lean away from the cursor ray
@@ -105,7 +107,7 @@ void main() {
   float th = smoothstep(0.02, 0.3, fly);
 
   // cube at rest
-  vec3 cubeLocal = position * cell * (1.0 - 0.18 * push);
+  vec3 cubeLocal = position * cell * (1.0 - 0.18 * push) * clamp(pop * 1.3, 0.0, 1.15);
   // thread in flight: thin box stretched along the path tangent
   float speed = length(tan3);
   vec3 fwd = speed > 1e-5 ? tan3 / speed : vec3(0.0, 1.0, 0.0);

@@ -114,6 +114,27 @@ img { display: block; max-width: 100%; height: auto; }
 .placard b { display: block; font-weight: 500; color: var(--ink); }
 .placard.is-on { opacity: 1; }
 .placard.on-left { right: auto; left: var(--pad); text-align: left; }
+.at-end .placard { opacity: 0; }
+
+/* 'not me' note next to Miku. Static on small screens; pinned to her head on desktop. */
+.miku-note { position: relative; z-index: 3; grid-row: 4; margin: 1.6rem 0 0; max-width: 24rem; }
+.miku-note p { margin: 0; font-size: 0.92rem; line-height: 1.45; color: var(--ink-2); }
+.miku-note b { display: block; margin-bottom: 0.2rem; font: italic 400 1.35rem/1.1 var(--serif); color: var(--ink); }
+.miku-note-arrow { display: none; }
+.miku-note.is-anchored {
+  position: fixed; left: 0; top: 0; width: 0; height: 0; margin: 0;
+  translate: var(--x, -999px) var(--y, -999px);
+  opacity: var(--note-vis, 0); pointer-events: none;
+}
+.miku-note.is-anchored p { position: absolute; left: 92px; top: -104px; width: 15.5rem; }
+.miku-note.is-anchored .miku-note-arrow {
+  display: block; position: absolute; left: -2px; top: -56px; width: 96px; height: 64px; overflow: visible;
+}
+.miku-note-arrow path {
+  fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 120; stroke-dashoffset: 120; transition: stroke-dashoffset 0.9s var(--ease) 0.15s;
+}
+.miku-note.is-on .miku-note-arrow path { stroke-dashoffset: 0; }
 
 /* home-lab callouts, drawn over the sculpture */
 .callout-layer {
@@ -308,23 +329,53 @@ h2 em { color: var(--accent); }
 .lab-list span { display: block; font-size: 0.88rem; color: var(--ink-2); }
 .has-callouts .lab-list { display: none; }
 
-/* ------------------------------------------------------------------ 04 AUT */
-.aut { padding: 40vh var(--pad) 22vh; text-align: center; z-index: 2; }
-.aut .label { justify-content: center; }
-.aut .label::after { display: none; }
-.honours {
-  margin: 0 auto;
-  font-size: clamp(4.2rem, 15vw, 16rem); line-height: 0.82; letter-spacing: calc(-0.035em + (1 - var(--p, 1)) * 0.12em);
+/* ------------------------------------------------------------------ 04 route (pinned) */
+.route { height: 430vh; z-index: 2; }
+.route-pin {
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  padding: 16vh var(--pad) 0; overflow: hidden;
 }
-.honours-line { display: block; }
-.honours em { color: var(--accent); }
-.aut-sub { margin: 2rem auto 0; max-width: 34rem; color: var(--ink-2); }
-.aut-projects { margin: 1.6rem 0 0; display: flex; justify-content: center; align-items: baseline; gap: 0.6rem 1.4rem; flex-wrap: wrap; }
-.aut-projects a {
-  font: 400 1.35rem/1 var(--serif); padding-bottom: 0.2rem; border-bottom: 1px solid var(--line);
-  transition: color 0.3s, border-color 0.3s;
+.stops { list-style: none; margin: 4vh 0 0; padding: 0; position: relative; width: min(34rem, 42vw); min-height: 46vh; }
+.stop {
+  position: absolute; inset: 0 auto auto 0; width: 100%;
+  opacity: 0; translate: 48px 0; pointer-events: none;
+  transition: opacity 0.6s var(--ease), translate 0.8s var(--ease);
 }
-.aut-projects a:hover { color: var(--accent); border-color: var(--accent); }
+.stop.is-past { translate: -48px 0; }
+.stop.is-active { opacity: 1; translate: 0 0; pointer-events: auto; }
+.stop h3 {
+  margin: 0.9rem 0 1.3rem;
+  font: 400 clamp(2.4rem, 4.4vw, 4.4rem)/0.98 var(--serif); letter-spacing: -0.02em; text-wrap: balance;
+}
+.stop h3 em { color: var(--accent); }
+.stop p:last-child { margin: 0; color: var(--ink-2); max-width: 30rem; text-wrap: pretty; }
+.stop a { border-bottom: 1px solid var(--line); transition: color 0.3s, border-color 0.3s; }
+.stop a:hover { color: var(--accent); border-color: var(--accent); }
+
+.route-line {
+  position: absolute; left: var(--pad); right: calc(var(--pad) + 3.5rem); bottom: 13vh;
+  height: 1px; background: var(--line);
+}
+.route-fill {
+  position: absolute; left: 0; top: -0.5px; height: 2px;
+  width: calc(var(--route, 0) * 100%); background: var(--accent);
+}
+.route-stop { position: absolute; top: 0; left: calc(var(--at) * 100%); }
+.route-stop i {
+  position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--bg); border: 1.5px solid var(--muted);
+  transition: background-color 0.4s, border-color 0.4s, box-shadow 0.4s, scale 0.4s var(--ease);
+}
+.route-stop.is-on i { background: var(--accent); border-color: var(--accent); }
+.route-stop.is-here i { scale: 1.25; box-shadow: 0 0 0 6px color-mix(in oklab, var(--accent) 22%, transparent); }
+.route-stop b {
+  position: absolute; top: 1.1rem; left: 0; translate: -50% 0; white-space: nowrap;
+  font: 500 0.66rem/1 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted);
+  transition: color 0.4s;
+}
+.route-stop:nth-child(2) b { translate: 0 0; }
+.route-stop:nth-child(4) b { translate: -100% 0; }
+.route-stop.is-here b { color: var(--ink); }
 
 /* ------------------------------------------------------------------ 05 contact */
 .contact { min-height: 125vh; padding: 34vh var(--pad) 16vh; z-index: 2; }
@@ -358,6 +409,10 @@ h2 em { color: var(--accent); }
 
 /* ------------------------------------------------------------------ no WebGL */
 .no-webgl #stage, .no-webgl .loader, .no-webgl .placard, .no-webgl .callout-layer { display: none; }
+.no-webgl .route { height: auto; }
+.no-webgl .route-pin { position: static; height: auto; padding-bottom: 12vh; }
+.no-webgl .stop { position: static; opacity: 1; translate: none; margin-bottom: 3rem; }
+.no-webgl .route-line { display: none; }
 .no-webgl .lab { height: auto; }
 .no-webgl .lab-pin { position: static; height: auto; padding-bottom: 12vh; }
 
@@ -370,10 +425,14 @@ h2 em { color: var(--accent); }
   .hero { padding-top: 6rem; }
   .giant { justify-content: flex-start; padding-top: 22vh; font-size: clamp(4.6rem, 26vw, 10rem); }
   .hero-foot { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .hint { display: none; }
+  .miku-note { margin-top: 1rem; }
+  .miku-note b { font-size: 1.15rem; }
+  .miku-note p { font-size: 0.86rem; }
 
   /* the sculpture owns the top of the screen; copy rides in below it on a veil */
-  .tools, .guitar, .aut, .contact { padding: 60vh 1rem 14vh; }
-  .statement, .guitar-head, .lab-head, .lab-list, .aut > *, .contact-copy {
+  .tools, .guitar, .contact { padding: 60vh 1rem 14vh; }
+  .statement, .guitar-head, .lab-head, .lab-list, .contact-copy {
     background: var(--veil);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
@@ -392,12 +451,15 @@ h2 em { color: var(--accent); }
   .lab-pin { position: static; height: auto; padding: 60vh 1rem 10vh; }
   .lab-head { padding: 1.3rem 1.2rem 0; border-radius: 14px 14px 0 0; max-width: none; }
   .lab-list { display: grid !important; grid-template-columns: 1fr; margin: 0; padding: 1.2rem; border-radius: 0 0 14px 14px; max-width: none; }
-  .aut { text-align: left; }
-  .aut > * { padding: 0.6rem 1.2rem; }
-  .aut .label { justify-content: flex-start; margin: 0; padding-top: 1.3rem; border-radius: 14px 14px 0 0; }
-  .aut .aut-projects { justify-content: flex-start; margin: 0; padding-bottom: 1.4rem; border-radius: 0 0 14px 14px; }
-  .aut-sub { margin: 0; }
-  .honours { font-size: clamp(3.4rem, 17vw, 6rem); letter-spacing: -0.03em; }
+  .route { height: 400vh; }
+  .route-pin { padding: 54vh 1rem 0; }
+  .route-label { display: none; }
+  .stops { width: 100%; min-height: 0; margin: 0; }
+  .stop { background: var(--veil); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 1.1rem 1.2rem 1.3rem; border-radius: 14px; }
+  .stop h3 { font-size: clamp(1.9rem, 8vw, 2.5rem); margin: 0.6rem 0 0.8rem; }
+  .stop p:last-child { font-size: 0.93rem; }
+  .route-line { left: 1.6rem; right: 1.6rem; bottom: 7vh; }
+  .route-stop b { display: none; }
   .contact { min-height: auto; }
   .contact-copy { width: auto; }
 }

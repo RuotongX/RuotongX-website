@@ -10,11 +10,13 @@ export interface Pose {
 }
 
 const POSES: Pose[] = [
-  { x: 0.16, y: -0.1, s: 1.12, yaw: -0.3, pitch: 0.05, roll: 0, shadow: 1 }, // miku (hero)
+  { x: 0.14, y: -0.16, s: 1.3, yaw: -0.28, pitch: 0.06, roll: 0, shadow: 1 }, // miku (hero)
   { x: 0.0, y: -0.66, s: 0.6, yaw: -0.3, pitch: 0.12, roll: 0, shadow: 0.5 }, // chat bubbles, under the statement / between the screenshots
   { x: 0.64, y: -0.08, s: 0.95, yaw: 0.35, pitch: 0.05, roll: -0.3, shadow: 0.7 }, // guitar, leaning on the browser
   { x: 0.0, y: -0.36, s: 0.9, yaw: 0.0, pitch: 0.12, roll: 0, shadow: 1 }, // rack, centre stage under the title
-  { x: 0.02, y: 0.36, s: 0.72, yaw: 0.55, pitch: 0.34, roll: 0.06, shadow: 0 }, // mortarboard resting between the two lines
+  { x: 0.42, y: 0.12, s: 0.86, yaw: 0.55, pitch: 0.3, roll: 0, shadow: 1 }, // route stop 1: mortarboard
+  { x: 0.42, y: 0.0, s: 0.74, yaw: -0.42, pitch: 0.1, roll: 0, shadow: 1 }, // route stop 2: crane over a half-built model
+  { x: 0.42, y: 0.12, s: 0.9, yaw: -0.5, pitch: 0.18, roll: 0, shadow: 1 }, // route stop 3: rubbish truck
   { x: 0.42, y: -0.1, s: 1.3, yaw: -0.32, pitch: 0.95, roll: 0, shadow: 0 }, // nz (tilted toward viewer)
 ];
 
@@ -158,7 +160,9 @@ export class Stage {
       x = 0;
       // hero: stand below the name; chapters: sit above the copy
       const hero = Math.max(0, 1 - this.shown);
-      y = lerp(halfH * 0.4, -halfH * 0.12, hero) + p.y * 0.25;
+      // hero: a bit smaller, sitting between the name and the intro copy
+      s *= lerp(1, 0.84, hero);
+      y = lerp(halfH * 0.4, halfH * 0.02, hero) + p.y * 0.25;
     }
     const spinW = Math.max(0, 1 - Math.abs(this.shown - this.spinForm));
     const sway = Math.sin(time * 0.35) * 0.12;

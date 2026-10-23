@@ -3,7 +3,7 @@
 Personal site for Ruotong (Sam) Xu. It has one voxel sculpture that re-sculpts itself as you scroll. Nothing is pre-rendered: every form is defined as a signed distance field, voxelised in a Web Worker on page load, and drawn as a single instanced mesh.
 
 ```
-Miku → two chat bubbles → guitar → home-lab rack → mortarboard → New Zealand
+Miku (fumo) → two chat bubbles → guitar → home-lab rack → mortarboard → tower crane → rubbish truck → New Zealand
 ```
 
 This repo used to hold the 2022 React/antd profile site; that version lives in git history (last commit `d2dbbda`).
@@ -47,3 +47,7 @@ npm run probe      # voxelise every form in Node: voxel counts, timings, materia
 ### Theme
 
 Click the lamp button to switch themes. The choice is saved in `localStorage['rx-theme']`, and the OS preference is the default. The 3D palettes live in `src/voxel/materials.ts`. The CSS tokens are at the top of `style.css`.
+
+### Pinned multi-form sections
+
+A section with `data-steps="n"` holds n consecutive forms. Inside its sticky pin, one extra morph plays every 1.2 viewports (`STEP` in `main.ts`), so the section needs about `(n - 1) * 1.2 + 1.9` viewports of height. The "Since graduating" route uses this: AUT → RF Sons → Rubbish Direct.

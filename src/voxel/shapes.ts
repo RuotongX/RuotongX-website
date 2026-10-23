@@ -12,98 +12,89 @@ const {
   TEAL, SKIN, PINK, SILVER, TEAL_DEEP, EYE,
 } = MAT;
 
-// ---------------------------------------------------------------- Hatsune Miku, chibi figure on a stand
-// twin-tail spine per side (x is mirrored): [x, y, z, radius]
+// ---------------------------------------------------------------- Hatsune Miku, fumo-plush proportions
+// Big squashy head, tiny sitting body, legs straight out, twin tails down to the floor.
+// twin-tail spine (x mirrored): [x, y, z, radius]
 const TAIL: ReadonlyArray<readonly [number, number, number, number]> = [
-  [0.35, 0.6, -0.07, 0.09],
-  [0.56, 0.5, -0.15, 0.14],
-  [0.69, 0.16, -0.19, 0.155],
-  [0.69, -0.32, -0.17, 0.13],
-  [0.6, -0.8, -0.1, 0.05],
+  [0.42, 0.3, -0.1, 0.12],
+  [0.6, 0.14, -0.15, 0.17],
+  [0.7, -0.3, -0.13, 0.175],
+  [0.68, -0.72, -0.06, 0.15],
+  [0.62, -0.9, 0.06, 0.11],
 ];
-const tri = (v: number) => Math.abs(((v % 1) + 1) % 1 - 0.5) * 2; // 0..1 zig-zag
+const HEAD_Y = -0.06;
+const tri = (v: number) => Math.abs((((v % 1) + 1) % 1) - 0.5) * 2; // 0..1 zig-zag
 
 function miku(x: number, y: number, z: number, a: Acc) {
-  const ax = Math.abs(x), s = x < 0 ? -1 : 1;
+  const ax = Math.abs(x);
 
-  // display stand
-  a.add(cylinderY(x, y + 0.95, z, 0.44, 0.05, 0.02), STONE);
-
-  // boots (ink) with teal soles and teal top trim
-  for (const lx of [-0.1, 0.1]) {
-    a.add(capsule(x, y, z, lx, -0.85, 0.02, lx, -0.6, 0, 0.078), INK);
-    a.add(roundBox(x - lx, y + 0.885, z - 0.025, 0.085, 0.022, 0.11, 0.02), TEAL);
-    a.add(capsule(x, y, z, lx, -0.45, 0, lx, -0.6, 0, 0.07), SKIN); // thighs
+  // ---- body (sitting)
+  // legs straight out in front: boots ink, teal band at the top, teal soles
+  for (const lx of [-0.12, 0.12]) {
+    a.add(capsule(x, y, z, lx, -0.86, -0.02, lx * 1.1, -0.87, 0.36, 0.085), INK);
+    a.add(roundBox(x - lx * 1.1, y + 0.87, z - 0.44, 0.07, 0.075, 0.025, 0.02), TEAL);
   }
-  if (a.d <= 0 && y > -0.63 && y < -0.585 && a.m === INK) a.paint(-1, TEAL);
-
-  // pleated skirt: flared, with a teal hem
+  if (a.d <= 0 && a.m === INK && z > 0.1 && z < 0.15) a.paint(-1, TEAL);
+  // pleated skirt with a teal hem
   {
-    const r = 0.17 + clamp(-0.28 - y, 0, 0.3) * 0.62;
-    const pleat = 0.012 * Math.cos(Math.atan2(z, x) * 14);
-    const d = Math.max(Math.hypot(x, z * 1.12) - r - pleat, Math.abs(y + 0.39) - 0.11);
+    const r = 0.2 + clamp(-0.72 - y, 0, 0.16) * 0.7;
+    const pleat = 0.012 * Math.cos(Math.atan2(z, x) * 12);
+    const d = Math.max(Math.hypot(x, z) - r - pleat, Math.abs(y + 0.8) - 0.09);
     a.add(d, INK);
-    if (d <= 0 && y < -0.465) a.paint(-1, TEAL);
+    if (d <= 0 && y < -0.855) a.paint(-1, TEAL);
   }
-
-  // torso (silver sleeveless top) + teal tie + collar
-  a.add(roundBox(x, y + 0.14, z, 0.15, 0.15, 0.115, 0.08), SILVER);
-  if (a.d <= 0 && a.m === SILVER && z > 0.06) {
-    if (y < -0.01 && y > -0.21 && ax < 0.03 + (-0.01 - y) * 0.12) a.paint(-1, TEAL); // tie
-    if (y > -0.03 && ax < 0.11) a.paint(-1, TEAL); // collar
+  // torso: grey sleeveless top, teal tie and collar
+  a.add(roundBox(x, y + 0.6, z, 0.16, 0.13, 0.13, 0.1), SILVER);
+  if (a.d <= 0 && a.m === SILVER && z > 0.08) {
+    if (y < -0.52 && y > -0.7 && ax < 0.028 + (-0.52 - y) * 0.14) a.paint(-1, TEAL);
+    if (y > -0.53 && ax < 0.1) a.paint(-1, TEAL);
   }
-  a.add(capsule(x, y, z, 0, -0.02, 0, 0, 0.1, 0, 0.05), SKIN); // neck
+  // stubby arms resting on the skirt: black sleeves, teal cuffs, tiny hands
+  for (const sx of [-1, 1]) {
+    a.add(taper(x, y, z, sx * 0.15, -0.52, 0.0, sx * 0.25, -0.72, 0.1, 0.06, 0.075), INK);
+    a.add(sphere(x - sx * 0.27, y + 0.76, z - 0.13, 0.048), SKIN);
+  }
+  if (a.d <= 0 && a.m === INK && y > -0.76 && y < -0.67 && ax > 0.2 && z > 0.04) a.paint(-1, TEAL);
 
-  // left arm hangs; right arm waves. Detached silver sleeves flare toward the wrist, teal cuffs.
-  a.add(capsule(x, y, z, -0.15, -0.03, 0, -0.25, -0.3, 0.04, 0.048), SKIN);
-  a.add(taper(x, y, z, -0.21, -0.12, 0.02, -0.27, -0.32, 0.045, 0.055, 0.09), SILVER);
-  if (a.d <= 0 && a.m === SILVER && y < -0.28 && x < -0.18) a.paint(-1, TEAL);
-  a.add(sphere(x + 0.28, y + 0.37, z - 0.05, 0.05), SKIN);
-
-  a.add(capsule(x, y, z, 0.15, -0.03, 0, 0.33, 0.19, 0.06, 0.048), SKIN);
-  a.add(taper(x, y, z, 0.22, 0.05, 0.03, 0.32, 0.19, 0.06, 0.055, 0.09), SILVER);
-  if (a.d <= 0 && a.m === SILVER && y > 0.16 && x > 0.27) a.paint(-1, TEAL);
-  a.add(sphere(x - 0.35, y - 0.25, z - 0.07, 0.052), SKIN);
-
-  // head (skin) under a teal hair cap with a face window and zig-zag bangs
-  const hx = x, hy = y - 0.4, hz = z;
-  a.add(ellipsoid(hx, hy, hz, 0.29, 0.27, 0.26), SKIN);
-  let hair = ellipsoid(hx, y - 0.445, z + 0.03, 0.335, 0.325, 0.315);
-  const bang = 0.055 - 0.06 * tri(x * 8.5 + 0.5);
-  if (hz > 0.02 && hy < bang && ax < 0.235) hair = 1;
+  // ---- head
+  const hy = y - HEAD_Y;
+  a.add(ellipsoid(x, hy, z, 0.5, 0.42, 0.43), SKIN);
+  // hair: a slightly bigger dome with a face window under zig-zag bangs
+  let hair = ellipsoid(x, hy - 0.03, z + 0.025, 0.535, 0.465, 0.465);
+  const bangs = 0.1 - 0.075 * tri(x * 6.2 + 0.5);
+  if (z > 0.06 && hy < bangs && ax < 0.39) hair = 1;
   a.add(hair, TEAL);
   // side locks framing the face
-  a.add(capsule(ax, y, z, 0.245, 0.46, 0.1, 0.265, 0.13, 0.13, 0.06), TEAL);
+  a.add(taper(ax, y, z, 0.38, HEAD_Y + 0.1, 0.24, 0.4, HEAD_Y - 0.4, 0.24, 0.075, 0.05), TEAL);
 
-  // face, painted on the skin
-  if (a.d <= 0 && a.m === SKIN && z > 0.12 && y > 0.1) {
-    const ex = ax - 0.105, ey = hy + 0.075;
-    if ((ex / 0.056) ** 2 + (ey / 0.072) ** 2 < 1) {
-      a.paint(-1, ey > 0.03 ? INK : EYE);
-      if (Math.hypot(ax - 0.09, ey + 0.02) < 0.022) a.paint(-1, SNOW);
+  // face
+  if (a.d <= 0 && a.m === SKIN && z > 0.2) {
+    const ex = ax - 0.17, ey = hy + 0.11;
+    if ((ex / 0.085) ** 2 + (ey / 0.11) ** 2 < 1) {
+      a.paint(-1, ey > 0.045 ? INK : EYE);
+      if (Math.hypot(ax - 0.145, ey - 0.0) < 0.03) a.paint(-1, SNOW);
     }
-    if (Math.hypot(ax - 0.175, hy + 0.15) < 0.032) a.paint(-1, PINK); // blush
-    if (ax < 0.03 && Math.abs(hy + 0.2) < 0.016) a.paint(-1, INK); // mouth
+    if ((ax - 0.3) ** 2 / 0.06 ** 2 + (hy + 0.25) ** 2 / 0.03 ** 2 < 1) a.paint(-1, PINK);
+    if (ax < 0.035 && Math.abs(hy + 0.27) < 0.018) a.paint(-1, INK);
   }
 
-  // hair ties (ink, pink face) + headset ear pieces + mic
-  a.add(roundBox(ax - 0.33, y - 0.6, z + 0.05, 0.05, 0.075, 0.07, 0.02), INK);
-  if (a.d <= 0 && a.m === INK && ax > 0.375 && y > 0.53 && y < 0.67) a.paint(-1, PINK);
-  a.add(Math.max(Math.hypot(y - 0.39, z - 0.02) - 0.08, Math.abs(ax - 0.33) - 0.045), SILVER);
-  if (a.d <= 0 && a.m === SILVER && ax > 0.36 && Math.hypot(y - 0.39, z - 0.02) < 0.04) a.paint(-1, TEAL);
-  a.add(capsule(x, y, z, -0.34, 0.35, 0.06, -0.17, 0.22, 0.26, 0.022), INK);
-  a.add(sphere(x + 0.15, y - 0.21, z - 0.28, 0.035), INK);
+  // headset ear pieces
+  a.add(Math.max(Math.hypot(hy + 0.06, z - 0.05) - 0.1, Math.abs(ax - 0.5) - 0.045), SILVER);
+  if (a.d <= 0 && a.m === SILVER && ax > 0.53 && Math.hypot(hy + 0.06, z - 0.05) < 0.05) a.paint(-1, TEAL);
 
-  // twin tails: a tapered spine, darker teal on the side facing away
+  // hair ties: dark with a pink face
+  a.add(roundBox(ax - 0.44, y - 0.3, z + 0.08, 0.06, 0.09, 0.08, 0.025), INK);
+  if (a.d <= 0 && a.m === INK && ax > 0.495 && y > 0.22) a.paint(-1, PINK);
+
+  // twin tails: thick plush tubes down to the floor, darker teal on the back
   let best = 1e9, cz = 0;
   for (let i = 0; i < TAIL.length - 1; i++) {
     const [x0, y0, z0, r0] = TAIL[i], [x1, y1, z1, r1] = TAIL[i + 1];
     const d = taper(ax, y, z, x0, y0, z0, x1, y1, z1, r0, r1);
     if (d < best) { best = d; cz = z0 + (z1 - z0) * clamp((y0 - y) / (y0 - y1), 0, 1); }
   }
-  void s;
   a.add(best, TEAL);
-  if (best <= 0 && a.m === TEAL && z < cz - 0.05) a.paint(-1, TEAL_DEEP);
+  if (best <= 0 && a.m === TEAL && z < cz - 0.06) a.paint(-1, TEAL_DEEP);
 }
 
 // ---------------------------------------------------------------- two chat bubbles (building with an AI pair)
@@ -182,6 +173,107 @@ function rack(x: number, y: number, z: number, a: Acc) {
   // a cable that escaped
   a.add(capsule(x, y, z, 0.3, -0.62, -0.38, 0.62, -0.76, -0.3, 0.026), INK);
   a.add(capsule(x, y, z, 0.62, -0.76, -0.3, 0.7, -0.98, 0.0, 0.026), INK);
+}
+
+// ---------------------------------------------------------------- tower crane over a half-built frame (RF Sons)
+// Lower floors are built; the top floors exist only as the teal wireframe of the 3D model.
+const FLOOR = 0.3, FLOORS = 4, BX = -0.32, BHX = 0.3, BHZ = 0.3;
+function crane(x: number, y: number, z: number, a: Acc) {
+  a.add(roundBox(x + 0.05, y + 0.975, z, 0.86, 0.025, 0.45, 0.01), STONE);
+  // building frame
+  const lx = x - BX;
+  for (let i = 0; i <= FLOORS; i++) {
+    const fy = -0.95 + i * FLOOR;
+    const built = i <= 2;
+    if (built) a.add(roundBox(lx, y - fy, z, BHX + 0.03, 0.022, BHZ + 0.03, 0.005), PLASTER);
+    else {
+      // wireframe slab outline
+      for (const sz of [-1, 1]) a.add(capsule(lx, y, z, -BHX, fy, sz * BHZ, BHX, fy, sz * BHZ, 0.017), TEAL);
+      for (const sx of [-1, 1]) a.add(capsule(lx, y, z, sx * BHX, fy, -BHZ, sx * BHX, fy, BHZ, 0.017), TEAL);
+    }
+  }
+  for (const sx of [-1, 0, 1])
+    for (const sz of [-1, 1]) {
+      const cx = sx * BHX, cz2 = sz * BHZ;
+      const top = -0.95 + FLOORS * FLOOR;
+      const mid = -0.95 + 2 * FLOOR;
+      a.add(roundBox(lx - cx, y - (-0.95 + mid) / 2, z - cz2, 0.026, (mid + 0.95) / 2, 0.026), STONE);
+      a.add(capsule(lx, y, z, cx, mid, cz2, cx, top, cz2, 0.017), TEAL);
+    }
+  if (a.d <= 0 && a.m === PLASTER && z > BHZ + 0.01 && y < -0.95 + 2 * FLOOR) a.paint(-1, STONE);
+
+  // tower crane mast: a box with windows cut through every face -> lattice
+  const mx = x - 0.48;
+  if (Math.abs(mx) < 0.08 && Math.abs(z) < 0.08 && y < 0.76) {
+    let d = roundBox(mx, y - (-0.94 + 0.76) / 2, z, 0.065, (0.76 + 0.94) / 2, 0.065);
+    const f = (((y + 1) / 0.14) % 1 + 1) % 1;
+    // between the rungs only the four corner chords survive
+    if (f > 0.22 && f < 0.82 && (Math.abs(mx) < 0.035 || Math.abs(z) < 0.035)) d = 1;
+    a.add(d, GOLD);
+  }
+  // slewing unit + cab
+  a.add(roundBox(mx, y - 0.79, z, 0.085, 0.035, 0.085, 0.01), INK);
+  a.add(roundBox(mx - 0.02, y - 0.72, z - 0.11, 0.06, 0.06, 0.05, 0.015), PLASTER);
+  if (a.d <= 0 && a.m === PLASTER && z > 0.14 && y > 0.7) a.paint(-1, SCREEN);
+  // jib toward the building + counter-jib with its weight
+  {
+    const jy = y - 0.84;
+    let d = roundBox(x + 0.06, jy, z, 0.6, 0.032, 0.032, 0.005);
+    const f = (((x + 2) / 0.1) % 1 + 1) % 1;
+    if (f > 0.25 && f < 0.75 && Math.abs(jy) < 0.016 && x < 0.4) d = 1;
+    a.add(d, GOLD);
+    a.add(roundBox(x - 0.75, jy, z, 0.18, 0.03, 0.04, 0.005), GOLD);
+    a.add(roundBox(x - 0.86, y - 0.76, z, 0.06, 0.06, 0.06, 0.01), STONE);
+  }
+  // apex and ties
+  a.add(taper(x, y, z, 0.48, 0.86, 0, 0.48, 1.04, 0, 0.04, 0.02), GOLD);
+  a.add(capsule(x, y, z, 0.48, 1.03, 0, -0.45, 0.88, 0, 0.022), INK);
+  a.add(capsule(x, y, z, 0.48, 1.03, 0, 0.88, 0.88, 0, 0.022), INK);
+  // hook carrying the next beam to the top floor
+  a.add(capsule(x, y, z, -0.12, 0.82, 0, -0.12, 0.45, 0, 0.012), INK);
+  a.add(roundBox(x + 0.12, y - 0.42, z, 0.03, 0.03, 0.03, 0.008), ACCENT);
+  a.add(roundBox(x + 0.12, y - 0.36, z, 0.2, 0.025, 0.035, 0.005), ACCENT);
+}
+
+// ---------------------------------------------------------------- rubbish truck + wheelie bin (Rubbish Direct)
+function truck(x: number, y: number, z: number, a: Acc) {
+  // wheels (axis along z)
+  for (const wx of [-0.52, -0.2, 0.52])
+    for (const sz of [-1, 1]) {
+      const r = Math.hypot(x - wx, y + 0.83);
+      const d = Math.max(r - 0.15, Math.abs(z - sz * 0.22) - 0.065);
+      a.add(d, INK);
+      if (d <= 0 && r < 0.065 && Math.abs(z) > 0.25) a.paint(-1, SILVER);
+    }
+  a.add(roundBox(x - 0.05, y + 0.7, z, 0.78, 0.04, 0.2, 0.01), INK); // chassis
+  // compactor body
+  a.add(roundBox(x + 0.12, y + 0.37, z, 0.5, 0.3, 0.25, 0.06), SAGE);
+  if (a.d <= 0 && a.m === SAGE) {
+    if (Math.abs(y + 0.47) < 0.03) a.paint(-1, PLASTER); // stripe
+    if (Math.abs(z) > 0.24 && Math.abs(x + 0.12) < 0.38 && Math.abs(y + 0.28) < 0.11) {
+      // a little recycling mark: three chevrons
+      const u = x + 0.12, v = y + 0.28;
+      if (Math.abs(Math.abs(u) * 0.8 + v * 0.9 - 0.05) < 0.018 && Math.abs(u) < 0.09) a.paint(-1, PLASTER);
+    }
+  }
+  // tailgate / hopper
+  a.add(roundBox(x + 0.7, y + 0.42, z, 0.1, 0.27, 0.24, 0.05), STONE);
+  if (a.d <= 0 && a.m === STONE && x < -0.72 && (((y + 2) / 0.09) % 1) < 0.3) a.paint(-1, INK);
+  // cab
+  a.add(roundBox(x - 0.58, y + 0.44, z, 0.17, 0.23, 0.23, 0.06), PLASTER);
+  if (a.d <= 0 && a.m === PLASTER) {
+    if (x > 0.71 && y > -0.42 && y < -0.26 && Math.abs(z) < 0.19) a.paint(-1, SCREEN); // windscreen
+    if (Math.abs(z) > 0.2 && x > 0.48 && x < 0.69 && y > -0.42 && y < -0.28) a.paint(-1, SCREEN);
+  }
+  a.add(roundBox(x - 0.77, y + 0.66, z, 0.03, 0.05, 0.2, 0.01), INK); // bumper
+  for (const sz of [-1, 1]) a.add(roundBox(x - 0.76, y + 0.56, z - sz * 0.15, 0.02, 0.025, 0.035), GOLD);
+  a.add(roundBox(x - 0.58, y + 0.19, z, 0.08, 0.02, 0.1, 0.01), ACCENT); // beacon bar
+  // wheelie bin waiting at the kerb (yellow lid = recycling)
+  const bx = x + 1.02, bz = z - 0.22;
+  const w = 0.11 + (y + 1) * 0.06;
+  a.add(roundBox(bx, y + 0.76, bz, w, 0.24, w * 1.05, 0.02), INK);
+  a.add(roundBox(bx + 0.01, y + 0.5, bz, 0.15, 0.022, 0.15, 0.01), GOLD);
+  a.add(Math.max(Math.hypot(bx - 0.11, y + 0.96) - 0.04, Math.abs(bz) - 0.12), STONE);
 }
 
 // ---------------------------------------------------------------- mortarboard + diploma (AUT)
@@ -296,20 +388,12 @@ function fillNZ(g: Grid) {
 }
 
 export const SHAPES: ShapeDef[] = [
-  { id: 'miku', cell: 0.034, bounds: [-0.92, 0.92, -1.02, 0.82, -0.42, 0.46], sdf: miku },
+  { id: 'miku', cell: 0.03, bounds: [-0.92, 0.92, -1.0, 0.5, -0.45, 0.55], sdf: miku },
   { id: 'chat', cell: 0.036, bounds: [-1.0, 0.95, -0.95, 0.75, -0.3, 0.3], sdf: chat },
   { id: 'guitar', cell: 0.028, bounds: [-0.48, 0.48, -0.95, 1.3, -0.2, 0.2], sdf: guitar },
   { id: 'rack', cell: 0.04, bounds: [-0.62, 0.8, -1.02, 1.02, -0.5, 0.5], sdf: rack },
   { id: 'grad', cell: 0.036, bounds: [-0.9, 1.0, -1.0, 0.12, -0.9, 0.9], sdf: grad },
+  { id: 'crane', cell: 0.03, bounds: [-0.82, 1.0, -1.0, 1.08, -0.47, 0.47], sdf: crane },
+  { id: 'truck', cell: 0.032, bounds: [-1.2, 0.86, -1.0, 0.12, -0.42, 0.42], sdf: truck },
   { id: 'nz', cell: 0.024, bounds: [-0.72, 0.72, -0.06, 0.6, -1.0, 1.0], fill: fillNZ, ground: false },
 ];
-
-/** Points of interest on the rack, in its authoring space (before the ground shift). */
-export const RACK_POINTS = {
-  switch: [0.0, -0.64, 0.4],
-  bays: [-0.28, -0.17, 0.4],
-  bays2: [0.28, -0.37, 0.4],
-  nas: [0.17, 0.22, 0.4],
-  vents: [-0.25, 0.63, 0.4],
-  power: [0.32, -0.22, 0.42],
-} as const;
