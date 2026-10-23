@@ -18,16 +18,21 @@ npm run preview    # serve dist/ on :5321
 npm run probe      # voxelise every form in Node: voxel counts, timings, materials
 ```
 
-## Deploy (Cloudflare Workers, static assets)
+## Deploy: push to `master`
 
-```bash
-npm run deploy     # vite build + wrangler deploy (uses wrangler.jsonc)
-```
+Cloudflare **Workers Builds** watches this repo. Every push to `master` runs:
 
-- `wrangler.jsonc` serves `dist/` as static assets, with no Worker code. `public/_headers` gives the hashed `/assets/*` files a long cache, and `public/404.html` is the not-found page.
-- The first time on a machine, run `node ./node_modules/wrangler/bin/wrangler.js login`. It opens the browser.
-- `ruotongxu.dpdns.org` is attached to the Worker as a Custom Domain, under Workers & Pages → ruotongxu-site → Domains & Routes.
-- `npm run favicon` re-renders `public/favicon.svg` from the Miku SDF as a pixel-art front view of her head.
+1. `npm ci`. The Node version comes from `.node-version`, which is 22.
+2. `npm run build`, which runs `tsc --noEmit` and then the vite build into `dist/`.
+3. `npx wrangler deploy`, which uploads `dist/` as static assets for the Worker `ruotongxu-site`, configured in `wrangler.jsonc`.
+
+Pushes to any other branch upload a preview version and do not change the live site. Build logs are in the dashboard under Workers & Pages → ruotongxu-site → Deployments → View build history.
+
+- **One-time setup (dashboard):** Workers & Pages → ruotongxu-site → Settings → Builds → Connect → GitHub → `RuotongX/RuotongX-website`. Set the branch to `master`, the build command to `npm run build`, and the deploy command to `npx wrangler deploy`.
+- **Manual deploy from this PC (fallback):** `npm run deploy`. Run `node ./node_modules/wrangler/bin/wrangler.js login` once first.
+- **Domains:** `ruotongxu.dpdns.org` is a Custom Domain on the Worker. `ruotongxu-site.bagadiyi.workers.dev` stays on as a preview.
+- **Hosting files:** `public/_headers` gives the hashed `/assets/*` files a long cache, and `public/404.html` is the not-found page.
+- **Favicon:** `npm run favicon` re-renders `public/favicon.svg` from the Miku SDF as a pixel-art front view of her head.
 
 ## How it works
 
