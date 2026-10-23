@@ -3,14 +3,16 @@
 	// Static site on Cloudflare Workers (assets only, no Worker code).
 	// Deploy: npm run deploy  ->  vite build + wrangler deploy.
 	"name": "ruotongxu-site",
+	// keep the *.workers.dev URL alive as a preview / fallback
+	"workers_dev": true,
 	"compatibility_date": "2026-10-01",
 	"assets": {
 		"directory": "./dist",
 		// unknown paths fall back to a real 404, not the homepage
 		"not_found_handling": "404-page"
 	},
-	// Custom domain is attached once from the dashboard (Workers & Pages -> ruotongxu-site -> Domains),
-	// or uncomment once the DNS record for the apex is free:
-	// "routes": [{ "pattern": "ruotongxu.dpdns.org", "custom_domain": true }],
+	// Custom Domain: Cloudflare owns the DNS record and the certificate for it.
+	// (The first deploy replaced the old record that pointed at Netlify.)
+	"routes": [{ "pattern": "ruotongxu.dpdns.org", "custom_domain": true }],
 	"observability": { "enabled": false }
 }
