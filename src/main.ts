@@ -179,11 +179,6 @@ let stage: Stage | null = null;
 const lamp = initLamp(document.querySelector('.lamp')!, (night) => stage?.setTheme(night));
 startClock(document.querySelector('.clock')!);
 new IntersectionObserver(([e]) => root.classList.toggle('at-end', e.isIntersecting)).observe(document.querySelector('.colophon')!);
-const shaEl = document.querySelector<HTMLAnchorElement>('.build-sha');
-if (shaEl) {
-  shaEl.textContent = __BUILD__;
-  if (__BUILD__ !== 'dev') shaEl.href = `https://github.com/RuotongX/RuotongX-website/commit/${__BUILD__}`;
-}
 const yearEl = document.querySelector('.year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 

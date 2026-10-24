@@ -18,25 +18,21 @@ npm run preview    # serve dist/ on :5321
 npm run probe      # voxelise every form in Node: voxel counts, timings, materials
 ```
 
-## Deploy (Cloudflare Workers Builds)
+## Deploy: push to `master`
 
-**A push to `master` deploys the site.** The Worker `ruotongxu-site` is connected to this repo through Workers Builds:
+Cloudflare **Workers Builds** watches this repo. Every push to `master` runs:
 
-| Setting | Value |
-|---|---|
-| Production branch | `master` |
-| Build command | `npm run build` (runs a type check, then the vite build) |
-| Deploy command | `npx wrangler deploy`, which serves `dist/` as static assets per `wrangler.jsonc` |
-| Node | 22.23.2, pinned by `.node-version` |
+1. `npm ci`. The Node version comes from `.node-version`, which is 22.
+2. `npm run build`, which runs `tsc --noEmit` and then the vite build into `dist/`.
+3. `npx wrangler deploy`, which uploads `dist/` as static assets for the Worker `ruotongxu-site`, configured in `wrangler.jsonc`.
 
-- Build logs are under Workers & Pages → ruotongxu-site → Deployments → View build history.
-- A failing type check stops the deploy, and the live site stays on the last good version.
-- Pushes to other branches upload a preview version without touching production.
-- The footer shows the short commit SHA of the live build (`WORKERS_CI_COMMIT_SHA`), so you can tell at a glance which commit is live.
-- Manual deploy from this PC still works with `npm run deploy`. If wrangler is logged out, run `node ./node_modules/wrangler/bin/wrangler.js login` first.
-- `ruotongxu.dpdns.org` is a Workers Custom Domain, and `ruotongxu-site.bagadiyi.workers.dev` is the fallback URL.
-- `public/_headers` gives the hashed `/assets/*` files a long cache, and `public/404.html` is the not-found page.
-- `npm run favicon` re-renders `public/favicon.svg` from the Miku SDF as a pixel-art front view of her head.
+Pushes to any other branch upload a preview version and do not change the live site. Build logs are in the dashboard under Workers & Pages → ruotongxu-site → Deployments → View build history.
+
+- **One-time setup (dashboard):** Workers & Pages → ruotongxu-site → Settings → Builds → Connect → GitHub → `RuotongX/RuotongX-website`. Set the branch to `master`, the build command to `npm run build`, and the deploy command to `npx wrangler deploy`.
+- **Manual deploy from this PC (fallback):** `npm run deploy`. Run `node ./node_modules/wrangler/bin/wrangler.js login` once first.
+- **Domains:** `ruotongxu.dpdns.org` is a Custom Domain on the Worker. `ruotongxu-site.bagadiyi.workers.dev` stays on as a preview.
+- **Hosting files:** `public/_headers` gives the hashed `/assets/*` files a long cache, and `public/404.html` is the not-found page.
+- **Favicon:** `npm run favicon` re-renders `public/favicon.svg` from the Miku SDF as a pixel-art front view of her head.
 
 ## How it works
 
