@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "probe": "node ./node_modules/rolldown/bin/cli.mjs tools/probe.ts --file node_modules/.cache/probe.mjs --format esm --platform node --silent && node node_modules/.cache/probe.mjs",
     "favicon": "node ./node_modules/rolldown/bin/cli.mjs tools/favicon.ts --file node_modules/.cache/favicon.mjs --format esm --platform node --silent && node node_modules/.cache/favicon.mjs",
-    "deploy": "npm run build && node ./node_modules/wrangler/bin/wrangler.js deploy"
+    "deploy": "npm run build && node ./node_modules/wrangler/bin/wrangler.js deploy",
+    "photos": "node tools/photos.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@types/three": "^0.186.0",
+    "sharp": "^0.34.5",
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "wrangler": "^4.152.0"

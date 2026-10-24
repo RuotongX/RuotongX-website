@@ -1,0 +1,12 @@
+[
+  { "file": "ins风格city.jpg", "id": "auckland", "title": "Auckland, pink hour", "meta": "Sony A6300 · manual lens · 1/200 s · ISO 100 · 2023" },
+  { "file": "new brighton pier.jpg", "id": "new-brighton", "title": "New Brighton, Christchurch", "meta": "Sony A6300 · 18–35mm @ 35mm · f/4 · 1/800 s · 2024" },
+  { "file": "Otira Viaduct.jpg", "id": "otira", "title": "Otira Viaduct, Arthur's Pass", "meta": "Sony A6300 · 55–200mm @ 70mm · f/4 · 1/640 s · 2024" },
+  { "file": "tekapo山.jpg", "id": "tekapo", "title": "Southern Alps from Lake Tekapo", "meta": "Nikon D5200 · 50mm f/1.8 · f/5 · 1/1600 s · 2018" },
+  { "file": "船.jpg", "id": "fiordland", "title": "Fiordland", "meta": "Nikon D5200 · 18–55mm @ 55mm · f/5.6 · 1/400 s · 2018" },
+  { "file": "明祖陵1.jpg", "id": "ming", "title": "Ming Ancestors Mausoleum, Jiangsu", "meta": "Sony A6300 · 18–200mm @ 162mm · f/6.3 · 1/640 s · 2020" },
+  { "file": "堤坝.jpg", "id": "breakwater", "title": "Breakwater, thirty seconds", "meta": "Sony A6300 · 18–200mm @ 90mm · f/25 · 30 s · 2020" },
+  { "file": "FILE0473.jpg", "id": "star-trails", "title": "Sixteen minutes of sky", "meta": "Nikon D5200 · 18mm · f/4 · one 962 s exposure · 2018" },
+  { "file": "船底半人马16张叠加.jpg", "id": "carina", "title": "Carina & Centaurus", "meta": "Sony A6300 · 16mm f/2.8 · 13 s · ISO 1600 · 16 frames stacked · 2023" },
+  { "file": "34张50定银河拼接.jpg", "id": "milky-way", "title": "The Milky Way, 34 frames", "meta": "50mm prime · 10 s · ISO 1000 · 34 frames stitched · 2023", "wide": true }
+]

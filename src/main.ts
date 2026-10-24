@@ -20,11 +20,12 @@ const FIG_NAMES = [
   'Mortarboard and diploma',
   'Tower crane over a half-built model',
   'Rubbish truck and a wheelie bin',
+  'Bambu Lab A1, printing a camera',
   'New Zealand, Auckland pinned',
 ];
 const LAB_FORM = 3;
 /** forms whose layout leaves room for the museum placard */
-const PLACARD_FORMS = new Set([2, 7]); // the hero has its own note; the route has its own line
+const PLACARD_FORMS = new Set([2, 8]); // the hero has its own note; the route and the photo strip have their own lines
 
 const sections = [...document.querySelectorAll<HTMLElement>('[data-form]')];
 const lenis = new Lenis({ autoRaf: true, lerp: reducedMotion ? 1 : 0.11, anchors: true });
@@ -46,6 +47,7 @@ sections.forEach((s, i) => {
 let vh = window.innerHeight;
 function measure() {
   vh = window.innerHeight;
+  measureOffclock();
   windows = [];
   sections.forEach((s, i) => {
     const top = s.getBoundingClientRect().top + window.scrollY;
@@ -132,6 +134,64 @@ if (scrubEl) {
 // ---------------------------------------------------------------- scroll-linked bits
 const duo = document.querySelector<HTMLElement>('.duo');
 const browser = document.querySelector<HTMLElement>('.browser');
+// ---------------------------------------------------------------- off the clock: print, then a sideways photo strip
+// Desktop: the section is pinned. The first PRINT_VH viewports of scroll run the print; the rest
+// slides the strip left by exactly the scroll distance. Phones get a plain vertical list.
+const PRINT_VH = 0.8;
+const oc = document.querySelector<HTMLElement>('.offclock')!;
+const ocTrack = oc.querySelector<HTMLElement>('.oc-track')!;
+const ocIntro = oc.querySelector<HTMLElement>('.oc-intro')!;
+const ocPhotos = [...oc.querySelectorAll<HTMLElement>('.oc-photo')];
+const ocCount = oc.querySelector<HTMLElement>('.oc-count')!;
+let ocDist = 0;
+let ocCenters: number[] = [];
+let ocDesktop = true;
+let printP = 0;
+let ocShift = 0;
+function measureOffclock() {
+  ocDesktop = window.innerWidth > 860 && window.innerWidth / window.innerHeight >= 0.9;
+  if (!ocDesktop) {
+    oc.style.height = '';
+    ocTrack.style.transform = '';
+    return;
+  }
+  const vw = document.documentElement.clientWidth; // excludes the scrollbar, unlike innerWidth
+  oc.style.setProperty('--vw', `${vw}px`);
+  ocDist = Math.max(0, ocTrack.offsetWidth - vw);
+  ocCenters = ocPhotos.map((f) => f.offsetLeft + f.offsetWidth / 2);
+  oc.style.height = `${Math.round(vh * (1 + PRINT_VH) + ocDist)}px`;
+}
+let ocCurrent = -1;
+function updateOffclock() {
+  if (!ocDesktop) {
+    const r = ocIntro.getBoundingClientRect();
+    printP = clamp01((vh * 0.95 - r.top) / (vh * 0.7));
+    ocShift = 0;
+    return;
+  }
+  const scrolled = -oc.getBoundingClientRect().top;
+  printP = clamp01((scrolled + vh * 0.2) / (vh * (PRINT_VH + 0.2)));
+  const strip = ocDist > 0 ? clamp01((scrolled - vh * PRINT_VH) / ocDist) : 0;
+  ocShift = -strip * ocDist;
+  ocTrack.style.transform = `translate3d(${ocShift.toFixed(1)}px, 0, 0)`;
+  oc.style.setProperty('--oc', strip.toFixed(4));
+  const pinned = scrolled > vh * PRINT_VH && scrolled < oc.offsetHeight - vh;
+  root.classList.toggle('in-strip', pinned);
+  let best = 0;
+  const mid = document.documentElement.clientWidth / 2 - ocShift;
+  ocCenters.forEach((c, i) => { if (Math.abs(c - mid) < Math.abs(ocCenters[best] - mid)) best = i; });
+  if (strip > 0.002 && best !== ocCurrent) {
+    ocCurrent = best;
+    ocCount.textContent = `${String(best + 1).padStart(2, '0')} / ${String(ocPhotos.length).padStart(2, '0')}`;
+  }
+}
+// phones: the photos are opaque cards; fade the sculpture out while they pass over it
+const photoIO = new IntersectionObserver((entries) => {
+  for (const e of entries) e.target.classList.toggle('is-visible', e.isIntersecting);
+  root.classList.toggle('photos-on', !ocDesktop && ocPhotos.some((f) => f.classList.contains('is-visible')));
+}, { rootMargin: '0px 0px -40% 0px' });
+ocPhotos.forEach((f) => photoIO.observe(f));
+
 const lab = document.querySelector<HTMLElement>('.lab')!;
 let labQ = 0;
 const route = document.querySelector<HTMLElement>('.route')!;
@@ -184,9 +244,12 @@ if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
 function onScroll() {
   const c = chapterAt(window.scrollY);
+  updateOffclock();
   if (stage) {
     stage.progress = c;
     stage.spin = reducedMotion ? 0 : (labQ - 0.5) * 1.3;
+    stage.setPrint(printP);
+    stage.shiftPx = ocShift;
   }
   root.classList.toggle('in-hero', c < 0.35);
   updateRoute(c);

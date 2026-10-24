@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { VoxelSculpture } from './sculpture';
 import type { VoxelShape } from '../voxel/voxelize';
+import { PRINTER } from '../voxel/printer';
 
 /** Where the sculpture sits for each form. x is a fraction of the half-viewport width. */
 export interface Pose {
@@ -17,6 +18,7 @@ const POSES: Pose[] = [
   { x: 0.42, y: 0.12, s: 0.86, yaw: 0.55, pitch: 0.3, roll: 0, shadow: 1 }, // route stop 1: mortarboard
   { x: 0.42, y: 0.0, s: 0.74, yaw: -0.42, pitch: 0.1, roll: 0, shadow: 1 }, // route stop 2: crane over a half-built model
   { x: 0.42, y: 0.12, s: 0.9, yaw: -0.5, pitch: 0.18, roll: 0, shadow: 1 }, // route stop 3: rubbish truck
+  { x: 0.5, y: -0.05, s: 1.08, yaw: -0.42, pitch: 0.3, roll: 0, shadow: 1 }, // bambu A1 printing a camera
   { x: 0.42, y: -0.1, s: 1.3, yaw: -0.32, pitch: 0.95, roll: 0, shadow: 0 }, // nz (tilted toward viewer)
 ];
 
@@ -58,6 +60,9 @@ export class Stage {
   /** extra yaw (radians) applied while form `spinForm` is showing */
   spin = 0;
   spinForm = 3;
+  /** horizontal offset in CSS px, applied while `shiftForm` is showing (keeps the printer locked to the photo strip) */
+  shiftPx = 0;
+  shiftForm = 7;
   /** called after every rendered frame (for DOM overlays that track the sculpture) */
   onFrame: (() => void) | null = null;
 
@@ -69,6 +74,11 @@ export class Stage {
 
     this.sculpture = new VoxelSculpture(opts.shapes, opts.threadBudget);
     this.yShift = opts.shapes.map((sh) => sh.yShift);
+    const pi = opts.shapes.findIndex((sh) => sh.id === 'printer');
+    if (pi >= 0) {
+      this.shiftForm = pi;
+      (this.sculpture.uniforms.uPrintRange.value as THREE.Vector2).set(PRINTER.bedTop + this.yShift[pi], PRINTER.printTop + this.yShift[pi]);
+    }
     if (opts.reducedMotion) this.sculpture.uniforms.uSwirl.value = 0.25;
     this.pivot.add(this.sculpture.mesh);
     this.scene.add(this.pivot);
@@ -108,6 +118,8 @@ export class Stage {
     return { x: (v.x * 0.5 + 0.5) * window.innerWidth, y: (-v.y * 0.5 + 0.5) * window.innerHeight };
   }
   setIntro(v: number) { this.sculpture.uniforms.uIntro.value = v; }
+  /** 0 = empty bed, 1 = finished print */
+  setPrint(v: number) { this.sculpture.uniforms.uPrintH.value = v; }
 
   private resize() {
     const w = window.innerWidth, h = window.innerHeight;
@@ -165,6 +177,8 @@ export class Stage {
       y = lerp(halfH * 0.4, halfH * 0.02, hero) + p.y * 0.25;
     }
     const spinW = Math.max(0, 1 - Math.abs(this.shown - this.spinForm));
+    const shiftW = this.mobile ? 0 : Math.max(0, 1 - Math.abs(this.shown - this.shiftForm));
+    x += this.shiftPx * ((2 * halfW) / window.innerWidth) * shiftW;
     const sway = Math.sin(time * 0.35) * 0.12;
     this.pivot.position.set(x, y, 0);
     this.pivot.scale.setScalar(s);

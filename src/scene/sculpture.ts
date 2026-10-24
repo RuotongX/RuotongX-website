@@ -15,7 +15,7 @@ export class VoxelSculpture {
   private readonly from: THREE.InstancedBufferAttribute;
   private readonly to: THREE.InstancedBufferAttribute;
   private readonly ao: THREE.InstancedBufferAttribute;
-  private readonly packed: Array<{ pos4: Float32Array; ao: Float32Array; cell: number }>;
+  private readonly packed: Array<{ id: string; pos4: Float32Array; ao: Float32Array; cell: number }>;
   private seg = -1;
 
   constructor(shapes: VoxelShape[], threadBudget: number) {
@@ -33,7 +33,7 @@ export class VoxelSculpture {
         pos4[i * 4 + 3] = s.mat[j];
         ao[i] = s.ao[j];
       }
-      return { pos4, ao, cell: s.cell };
+      return { id: s.id, pos4, ao, cell: s.cell };
     });
 
     const box = new THREE.BoxGeometry(1, 1, 1);
@@ -68,6 +68,10 @@ export class VoxelSculpture {
       uMouseO: { value: new THREE.Vector3(0, 0, 50) },
       uMouseD: { value: new THREE.Vector3(0, 0, -1) },
       uMouseK: { value: 0 },
+      uFromP: { value: 0 },
+      uToP: { value: 0 },
+      uPrintH: { value: 0 },
+      uPrintRange: { value: new THREE.Vector2(-0.86, -0.66) },
       uPalDay: { value: pal(PALETTE_DAY) },
       uPalNight: { value: pal(PALETTE_NIGHT) },
       uEmis: { value: EMISSIVE.map(([d, n2]) => new THREE.Vector2(d, n2)) },
@@ -97,5 +101,7 @@ export class VoxelSculpture {
     this.from.needsUpdate = this.to.needsUpdate = this.ao.needsUpdate = true;
     this.uniforms.uCellA.value = a.cell;
     this.uniforms.uCellB.value = b.cell;
+    this.uniforms.uFromP.value = a.id === 'printer' ? 1 : 0;
+    this.uniforms.uToP.value = b.id === 'printer' ? 1 : 0;
   }
 }

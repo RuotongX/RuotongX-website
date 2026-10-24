@@ -3,7 +3,7 @@
 Personal site for Ruotong (Sam) Xu. It has one voxel sculpture that re-sculpts itself as you scroll. Nothing is pre-rendered: every form is defined as a signed distance field, voxelised in a Web Worker on page load, and drawn as a single instanced mesh.
 
 ```
-Miku (fuwa petit plush) → two chat bubbles → guitar → home-lab rack → mortarboard → tower crane → rubbish truck → New Zealand
+Miku (fuwa petit plush) → two chat bubbles → guitar → home-lab rack → mortarboard → tower crane → rubbish truck → Bambu Lab A1 printing a camera → New Zealand
 ```
 
 This repo used to hold the 2022 React/antd profile site; that version lives in git history (last commit `d2dbbda`).
@@ -60,3 +60,13 @@ Click the lamp button to switch themes. The choice is saved in `localStorage['rx
 ### Pinned multi-form sections
 
 A section with `data-steps="n"` holds n consecutive forms. Inside its sticky pin, one extra morph plays every 1.2 viewports (`STEP` in `main.ts`), so the section needs about `(n - 1) * 1.2 + 1.9` viewports of height. The "Since graduating" route uses this: AUT → RF Sons → Rubbish Direct.
+
+### Off the clock (photos + the printer)
+
+- `npm run photos -- "<folder with the originals>"` reads `tools/photos.json` for the order and captions. It writes `public/photos/<id>-<h>.webp` at two heights, removing all EXIF data including GPS, and rewrites the figures between `<!-- photos:start -->` and `<!-- photos:end -->` in `index.html`. The originals never enter the repo.
+- On desktop the section is pinned. The first 0.8 viewport of scroll runs the print, then the strip slides sideways by exactly the remaining scroll, with the sculpture moving along with it. Phones get a vertical list, and the sculpture fades out while photos are on screen.
+- The print animation runs in the vertex shader (`printerAnim`), keyed on the material ids GANTRY, HEAD, BED and PRINT:
+  - PRINT voxels above the current layer are hidden, and the layer being laid down glows.
+  - The gantry and head are authored at the last layer and lowered to the current one.
+  - The bed slides and the head sweeps.
+  - The heights live in `src/voxel/printer.ts`. Parts that move separately keep their touching faces as surfaces (`MOTION_GROUP` in `voxelize.ts`).

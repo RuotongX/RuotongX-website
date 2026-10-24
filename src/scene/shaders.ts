@@ -2,11 +2,15 @@
 // At rest every instance is a solid cube in the current form. While the sculpture changes
 // shape, cubes stretch into thin threads that ride a shared vortex, so the swarm reads as
 // silk rather than gravel, then condense back into cubes in the next form.
-import { MAT_COUNT } from '../voxel/materials';
+import { MAT, MAT_COUNT } from '../voxel/materials';
 
 export const vertexShader = /* glsl */ `
 precision highp float;
 #define MATS ${MAT_COUNT}
+#define M_GANTRY ${MAT.GANTRY}
+#define M_HEAD ${MAT.HEAD}
+#define M_BED ${MAT.BED}
+#define M_PRINT ${MAT.PRINT}
 
 attribute vec4 aFrom;   // xyz + material id
 attribute vec4 aTo;
@@ -27,6 +31,11 @@ uniform vec3 uKeyDir;
 uniform vec3 uPalDay[MATS];
 uniform vec3 uPalNight[MATS];
 uniform vec2 uEmis[MATS];
+// 3D printer form: which side of the current morph is the printer, print progress, layer range
+uniform float uFromP;
+uniform float uToP;
+uniform float uPrintH;
+uniform vec2 uPrintRange; // bed top, top of the finished print (form space)
 
 varying vec3 vColor;
 varying vec3 vN;
@@ -51,6 +60,27 @@ float matEmis(float id, vec3 p) {
   if (i == 4) e *= 0.35 + 0.65 * step(0.42, fract(uTime * (0.35 + aRnd.y * 1.6) + aRnd.z)); // LEDs blink
   if (i == 9) e *= 0.45 + 0.55 * (0.5 + 0.5 * sin(uTime * 3.0 - length(p) * 9.0));         // rings pulse
   return e;
+}
+
+float printLayer() { return mix(uPrintRange.x, uPrintRange.y, uPrintH); }
+float printActive() { return smoothstep(0.0, 0.02, uPrintH) * (1.0 - smoothstep(0.97, 1.0, uPrintH)); }
+
+// Moves the printer's parts for the current print progress. Returns 0 for print voxels above the
+// current layer (not printed yet), and writes a "hot plastic" glow for the layer being laid down.
+float printerAnim(inout vec3 q, float id, out float hot) {
+  int i = int(id + 0.5);
+  float h = printLayer();
+  float act = printActive();
+  float vis = 1.0;
+  hot = 0.0;
+  if (i == M_PRINT) {
+    vis = step(q.y, h + 0.011);
+    hot = act * (1.0 - smoothstep(0.0, 0.035, abs(q.y - h)));
+  }
+  if (i == M_BED || i == M_PRINT) q.z += sin(uTime * 2.6) * 0.085 * act;   // bed slides front/back
+  if (i == M_GANTRY || i == M_HEAD) q.y += h - uPrintRange.y;            // authored at the last layer
+  if (i == M_HEAD) q.x += sin(uTime * 3.7) * 0.13 * act;                  // toolhead sweeps
+  return vis;
 }
 
 // Where a particle is at flight time t on its way from a to b.
@@ -79,10 +109,16 @@ void main() {
   float delay = clamp(aRnd.x * 0.42 + (aFrom.y + 1.0) * 0.1, 0.0, 0.55);
   float lt = clamp((uMix - delay) / 0.45, 0.0, 1.0);
 
-  vec3 p = flowPos(lt, aFrom.xyz, aTo.xyz);
-  vec3 tan3 = flowPos(min(lt + 0.012, 1.0), aFrom.xyz, aTo.xyz) - flowPos(max(lt - 0.012, 0.0), aFrom.xyz, aTo.xyz);
+  vec3 a = aFrom.xyz, b = aTo.xyz;
+  float visA = 1.0, visB = 1.0, hotA = 0.0, hotB = 0.0;
+  if (uFromP > 0.5) visA = printerAnim(a, aFrom.w, hotA);
+  if (uToP > 0.5) visB = printerAnim(b, aTo.w, hotB);
+
+  vec3 p = flowPos(lt, a, b);
+  vec3 tan3 = flowPos(min(lt + 0.012, 1.0), a, b) - flowPos(max(lt - 0.012, 0.0), a, b);
   float fly = sin(PI * lt);
   float e = smoother(lt);
+  float vis = mix(visA, visB, e);
 
   // intro: the figure pops out of the floor with a springy overshoot (no threads)
   float pop = 1.0;
@@ -107,7 +143,7 @@ void main() {
   float th = smoothstep(0.02, 0.3, fly);
 
   // cube at rest
-  vec3 cubeLocal = position * cell * (1.0 - 0.18 * push) * clamp(pop * 1.3, 0.0, 1.15);
+  vec3 cubeLocal = position * cell * (1.0 - 0.18 * push) * clamp(pop * 1.3, 0.0, 1.15) * vis;
   // thread in flight: thin box stretched along the path tangent
   float speed = length(tan3);
   vec3 fwd = speed > 1e-5 ? tan3 / speed : vec3(0.0, 1.0, 0.0);
@@ -118,7 +154,7 @@ void main() {
   float len = clamp(speed * 7.0, cell * 0.8, 0.55);
   vec3 threadLocal = side * position.x * w + up2 * position.y * w + fwd * position.z * len;
 
-  vec3 local = mix(cubeLocal, threadLocal, th);
+  vec3 local = mix(cubeLocal, threadLocal * max(vis, step(0.5, fly)), th);
   vec4 mv = modelViewMatrix * vec4(p + local, 1.0);
   gl_Position = projectionMatrix * mv;
 
@@ -127,7 +163,7 @@ void main() {
   vLocal = position;
   vAO = mix(aAO.x, aAO.y, e);
   vColor = mix(matColor(aFrom.w), matColor(aTo.w), e);
-  vEmis = mix(matEmis(aFrom.w, aFrom.xyz), matEmis(aTo.w, aTo.xyz), e);
+  vEmis = mix(matEmis(aFrom.w, aFrom.xyz), matEmis(aTo.w, aTo.xyz), e) + mix(hotA, hotB, e) * 0.7;
   vThread = th;
 
   // Kajiya-Kay style sheen: threads catch the light when they lie across it

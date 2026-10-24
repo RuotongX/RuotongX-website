@@ -1,4 +1,9 @@
 import { Acc } from './sdf';
+import { MAT } from './materials';
+
+/** Parts the shader moves on their own. A face shared with another group must stay a surface. */
+const MOTION_GROUP = new Map<number, number>([[MAT.GANTRY, 1], [MAT.HEAD, 2], [MAT.BED, 3], [MAT.PRINT, 4]]);
+const groupOf = (occ: number) => MOTION_GROUP.get(occ - 1) ?? 0;
 
 /** A shape is authored either as an SDF (sampled on a grid) or by filling the grid directly. */
 export interface ShapeDef {
@@ -86,11 +91,14 @@ export function voxelize(def: ShapeDef): VoxelShape {
   for (let k = 0; k < g.nz; k++)
     for (let j = 0; j < g.ny; j++)
       for (let i = 0; i < g.nx; i++) {
-        if (!g.occ[g.idx(i, j, k)]) continue;
+        const self = g.occ[g.idx(i, j, k)];
+        if (!self) continue;
+        const grp = groupOf(self);
+        const open = (v: number) => !v || groupOf(v) !== grp;
         if (
-          !g.get(i + 1, j, k) || !g.get(i - 1, j, k) ||
-          !g.get(i, j + 1, k) || !g.get(i, j - 1, k) ||
-          !g.get(i, j, k + 1) || !g.get(i, j, k - 1)
+          open(g.get(i + 1, j, k)) || open(g.get(i - 1, j, k)) ||
+          open(g.get(i, j + 1, k)) || open(g.get(i, j - 1, k)) ||
+          open(g.get(i, j, k + 1)) || open(g.get(i, j, k - 1))
         ) pick.push(i, j, k);
       }
 

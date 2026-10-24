@@ -6,10 +6,11 @@ import {
 import { MAT } from './materials';
 import type { Grid, ShapeDef } from './voxelize';
 import { AUCKLAND, NZ_RINGS } from '../data/nz';
+import { PRINTER } from './printer';
 
 const {
   PLASTER, STONE, INK, ACCENT, LED, SCREEN, WOOD, SAGE, GOLD, WAVE, SPRUCE, SNOW,
-  TEAL, SKIN, PINK, SILVER, EYE, BLUSH,
+  TEAL, SKIN, PINK, SILVER, EYE, BLUSH, GANTRY, HEAD, BED, PRINT,
 } = MAT;
 
 // ---------------------------------------------------------------- Hatsune Miku as a fuwa petit ("fufu") plush
@@ -329,6 +330,46 @@ function grad(x: number, y: number, z: number, a: Acc) {
   if (roll < 0.02 && Math.abs(ux) < 0.05) a.paint(-1, ACCENT);
 }
 
+// ---------------------------------------------------------------- Bambu Lab A1 printing a camera, with an AMS lite beside it
+// The shader animates GANTRY / HEAD / BED / PRINT voxels (shaders.ts → printerAnim) using these heights.
+const BED_TOP = PRINTER.bedTop;
+
+function printer(x: number, y: number, z: number, a: Acc) {
+  // base unit with the touchscreen at the front right
+  a.add(roundBox(x, y + 0.95, z - 0.02, 0.6, 0.05, 0.5, 0.03), PLASTER);
+  a.add(roundBox(x - 0.42, y + 0.94, z - 0.53, 0.11, 0.032, 0.02, 0.01), SCREEN);
+  // build plate (slides front/back)
+  a.add(roundBox(x, y - (BED_TOP - 0.014), z, 0.44, 0.014, 0.42, 0.01), BED);
+  // arch frame: two columns and a top bar, set back a little
+  for (const s of [-1, 1]) a.add(roundBox(x - s * 0.56, y + 0.22, z + 0.02, 0.04, 0.68, 0.05, 0.012), STONE);
+  a.add(roundBox(x, y - 0.46, z + 0.02, 0.6, 0.04, 0.05, 0.012), STONE);
+  // X gantry + toolhead, authored at the LAST layer (nozzle just above the finished print) so they
+  // never overlap the print in authoring space; the shader moves them down to the current layer.
+  const top = PRINTER.printTop;
+  a.add(roundBox(x, y - (top + 0.2), z + 0.02, 0.54, 0.028, 0.035, 0.008), GANTRY);
+  a.add(roundBox(x, y - (top + 0.13), z - 0.1, 0.1, 0.1, 0.08, 0.03), HEAD);
+  a.add(taper(x, y, z, 0, top + 0.035, -0.1, 0, top + 0.004, -0.1, 0.03, 0.014), HEAD);
+  // the print: a little DSLR (body, prism hump, grip, lens with a hood), lens facing the viewer
+  const py = BED_TOP;
+  let d = roundBox(x, y - (py + 0.105), z + 0.02, 0.22, 0.105, 0.075, 0.03);
+  d = Math.min(d, roundBox(x + 0.01, y - (py + 0.235), z + 0.02, 0.075, 0.05, 0.06, 0.02));
+  d = Math.min(d, roundBox(x + 0.185, y - (py + 0.1), z - 0.04, 0.055, 0.1, 0.06, 0.025));
+  d = Math.min(d, cappedCylinder(x, y, z, -0.02, py + 0.105, 0.05, -0.02, py + 0.105, 0.2, 0.08));
+  d = Math.min(d, cappedCylinder(x, y, z, -0.02, py + 0.105, 0.2, -0.02, py + 0.105, 0.25, 0.092));
+  d = Math.max(d, -cappedCylinder(x, y, z, -0.02, py + 0.105, 0.22, -0.02, py + 0.105, 0.3, 0.06)); // hollow hood
+  a.add(d, PRINT);
+  // AMS lite: a stand with four spools, teal / red / gold / pink
+  a.add(roundBox(x + 0.88, y + 0.97, z + 0.05, 0.14, 0.03, 0.14, 0.01), STONE);
+  a.add(roundBox(x + 0.88, y + 0.62, z + 0.05, 0.025, 0.36, 0.025, 0.008), STONE);
+  const spools: Array<[number, number, number]> = [[-0.98, -0.18, TEAL], [-0.78, -0.18, ACCENT], [-0.98, -0.42, GOLD], [-0.78, -0.42, PINK]];
+  for (const [sx, sy, m] of spools) {
+    const r = Math.hypot(x - sx, y - sy);
+    const dd = Math.max(r - 0.095, Math.abs(z - 0.08) - 0.045);
+    a.add(dd, m);
+    if (dd <= 0 && (r < 0.035 || Math.abs(z - 0.08) > 0.035)) a.paint(-1, STONE); // hub + flanges
+  }
+}
+
 // ---------------------------------------------------------------- New Zealand relief
 const LAT0 = -40.9, LON0 = 172.5, KX = Math.cos((40.9 * Math.PI) / 180), S = 1 / 6.6;
 const toX = (lon: number) => (lon - LON0) * KX * S;
@@ -429,5 +470,6 @@ export const SHAPES: ShapeDef[] = [
   { id: 'grad', cell: 0.036, bounds: [-0.9, 1.0, -1.0, 0.12, -0.9, 0.9], sdf: grad },
   { id: 'crane', cell: 0.03, bounds: [-0.82, 1.0, -1.0, 1.08, -0.47, 0.47], sdf: crane },
   { id: 'truck', cell: 0.032, bounds: [-1.2, 0.86, -1.0, 0.12, -0.42, 0.42], sdf: truck },
+  { id: 'printer', cell: 0.022, bounds: [-1.1, 0.66, -1.0, 0.92, -0.56, 0.5], sdf: printer },
   { id: 'nz', cell: 0.024, bounds: [-0.72, 0.72, -0.06, 0.6, -1.0, 1.0], fill: fillNZ, ground: false },
 ];

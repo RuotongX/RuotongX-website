@@ -89,6 +89,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* ------------------------------------------------------------------ stage + overlays */
 #stage {
+  transition: opacity 0.5s var(--ease);
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -377,7 +378,41 @@ h2 em { color: var(--accent); }
 .route-stop:nth-child(4) b { translate: -100% 0; }
 .route-stop.is-here b { color: var(--ink); }
 
-/* ------------------------------------------------------------------ 05 contact */
+/* ------------------------------------------------------------------ 05 off the clock (pinned, sideways strip) */
+.offclock { z-index: 2; }
+.oc-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.oc-track {
+  position: absolute; left: 0; top: 0; height: 100%; width: max-content;
+  display: flex; align-items: center; gap: 4vw;
+  padding-right: calc(var(--pad) + 3.5rem);
+  will-change: transform;
+}
+.oc-intro {
+  flex: none; box-sizing: border-box; width: var(--vw, 100vw); height: 100%;
+  padding: 0 var(--pad); display: flex; flex-direction: column; justify-content: center;
+}
+.oc-intro > * { max-width: min(34rem, 40vw); }
+.oc-body { margin: 1.5rem 0 1.6rem; color: var(--ink-2); text-wrap: pretty; }
+.oc-photo { flex: none; margin: 0; }
+.oc-photo img {
+  display: block; height: 62vh; width: calc(62vh * var(--ar)); object-fit: cover;
+  border-radius: 3px; background: var(--card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 24px 48px -24px rgb(0 0 0 / 0.35);
+}
+.oc-photo figcaption { margin-top: 1rem; display: grid; gap: 0.25rem; max-width: max(18rem, calc(62vh * var(--ar))); }
+.oc-photo figcaption b { font: 400 1.35rem/1.15 var(--serif); }
+.oc-photo.is-wide figcaption { max-width: none; justify-items: end; text-align: right; }
+.oc-photo figcaption span { font: 500 0.66rem/1.5 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.oc-progress {
+  position: absolute; left: var(--pad); right: calc(var(--pad) + 3.5rem); bottom: 6vh; height: 1px;
+  background: var(--line); opacity: 0; transition: opacity 0.4s var(--ease);
+}
+.in-strip .oc-progress { opacity: 1; }
+.oc-fill { position: absolute; left: 0; top: -0.5px; height: 2px; width: calc(var(--oc, 0) * 100%); background: var(--accent); }
+.oc-count { position: absolute; right: 0; bottom: 0.7rem; color: var(--ink); }
+.in-strip .rail { opacity: 0; pointer-events: none; }
+
+/* ------------------------------------------------------------------ 06 contact */
 .contact { min-height: 125vh; padding: 34vh var(--pad) 16vh; z-index: 2; }
 .contact-copy { width: min(36rem, 44vw); }
 .contact-sub { margin: 1.4rem 0 2rem; color: var(--ink-2); }
@@ -461,6 +496,19 @@ h2 em { color: var(--accent); }
   .route-line { left: 1.6rem; right: 1.6rem; bottom: 7vh; }
   .route-stop b { display: none; }
   .contact { min-height: auto; }
+  .offclock { height: auto !important; }
+  .oc-pin { position: static; height: auto; overflow: visible; }
+  .oc-track { position: static; display: block; width: 100%; height: auto; transform: none !important; padding: 60vh 1rem 8vh; }
+  .oc-intro {
+    width: 100%; height: auto; padding: 1.3rem 1.2rem 1.4rem; border-radius: 14px;
+    background: var(--veil); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .oc-intro > * { max-width: none; }
+  .oc-hint, .oc-progress { display: none; }
+  .oc-photo { margin-top: 2.2rem; }
+  .oc-photo img { width: 100%; height: auto; aspect-ratio: var(--ar); }
+  .oc-photo figcaption { max-width: none; padding: 0 0.2rem; }
+  .photos-on #stage { opacity: 0; }
   .contact-copy { width: auto; }
 }
 

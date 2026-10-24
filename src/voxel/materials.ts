@@ -19,9 +19,14 @@ export const MAT = {
   TEAL_DEEP: 16, // spare darker teal
   EYE: 17, // brown eyes / face lines
   BLUSH: 18, // cheeks, inside of the smile
+  // 3D printer parts: the shader animates these by id (see printerAnim in shaders.ts)
+  GANTRY: 19, // X gantry: rises with the print
+  HEAD: 20, // toolhead: rises and sweeps left/right
+  BED: 21, // build plate: slides front/back
+  PRINT: 22, // the part being printed: hidden above the current layer
 } as const;
 
-export const MAT_COUNT = 19;
+export const MAT_COUNT = 23;
 
 // sRGB hex palettes. Index = material id.
 export const PALETTE_DAY = [
@@ -44,6 +49,10 @@ export const PALETTE_DAY = [
   '#249a92', // teal deep
   '#4a2a20', // eye (brown)
   '#f3a4b2', // blush
+  '#34363a', // gantry
+  '#f3f2ee', // toolhead
+  '#4d4641', // bed (textured PEI)
+  '#3cc4ba', // print (teal PLA)
 ];
 
 export const PALETTE_NIGHT = [
@@ -66,6 +75,10 @@ export const PALETTE_NIGHT = [
   '#1d7f78', // teal deep
   '#3a221b', // eye (brown)
   '#e88a9c', // blush
+  '#1c1d20', // gantry
+  '#b9b7b1', // toolhead
+  '#2c2826', // bed
+  '#33b5ab', // print (teal PLA)
 ];
 
 /** How much each material glows (0..1) in [day, night]. */
@@ -74,4 +87,5 @@ export const EMISSIVE: ReadonlyArray<readonly [number, number]> = [
   [0, 0], [0, 0], [0.05, 0.2], [0.5, 1], [0, 0], [0, 0.05],
   [0, 0.1], [0, 0], [0.1, 0.5], [0, 0], [0, 0.05], [0, 0],
   [0.05, 0.25],
+  [0, 0], [0, 0.05], [0, 0], [0, 0.1],
 ];
